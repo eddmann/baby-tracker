@@ -1,0 +1,17 @@
+{
+  "name": "baby-tracker",
+  "main": "worker/index.ts",
+  "compatibility_date": "2025-01-08",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "baby-tracker-db",
+      "database_id": "8a435723-c905-491a-b0cf-d377b106658e"
+    }
+  ]
+}
