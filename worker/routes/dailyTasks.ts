@@ -65,9 +65,7 @@ dailyTasks.get("/", async (c) => {
   const lastCompletions = new Map(
     lastCompletionsRaw.map((r) => [r.task_id, r.last_completed_at]),
   );
-  const todayCompletedTaskIds = new Set(
-    todayCompletions.map((c) => c.task_id),
-  );
+  const todayCompletedTaskIds = new Set(todayCompletions.map((c) => c.task_id));
 
   const tasksWithStatus = computeTaskStatuses(
     tasks,
@@ -93,20 +91,31 @@ dailyTasks.get("/", async (c) => {
 const createSchema = z.object({
   name: z.string().min(1).max(200),
   frequency_days: z.number().int().min(1).max(365),
-  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  start_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
 });
 
 dailyTasks.post("/", zValidator("json", createSchema), async (c) => {
   const body = c.req.valid("json");
   const repo = createD1DailyTaskRepository(c.env);
-  const task = await repo.create(body.name, body.frequency_days, body.start_date);
+  const task = await repo.create(
+    body.name,
+    body.frequency_days,
+    body.start_date,
+  );
   return c.json({ data: { task } });
 });
 
 const editSchema = z.object({
   name: z.string().min(1).max(200).optional(),
   frequency_days: z.number().int().min(1).max(365).optional(),
-  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  start_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable()
+    .optional(),
 });
 
 dailyTasks.put("/:id", zValidator("json", editSchema), async (c) => {

@@ -46,8 +46,26 @@ t: test ## Alias for test
 
 ##@ Code Quality
 
+lint: ## Run all linters (typecheck + eslint + prettier)
+	bun run lint
+
+lint/client: ## Lint client code
+	bun run client:lint
+
+lint/worker: ## Lint worker code
+	bun run worker:lint
+
 typecheck: ## Run TypeScript type checking
 	bun run typecheck
+
+fmt: ## Format all code
+	bun run client:fmt && bun run worker:fmt
+
+fmt/client: ## Format client code
+	bun run client:fmt
+
+fmt/worker: ## Format worker code
+	bun run worker:fmt
 
 ##@ Deployment
 
@@ -56,6 +74,8 @@ ship: ## Full deploy pipeline
 
 deploy: ## Deploy to Cloudflare
 	bun run deploy
+
+can-release: lint test ## CI gate - all checks
 
 ##@ Utilities
 

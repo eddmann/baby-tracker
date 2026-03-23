@@ -1,7 +1,11 @@
 import type { DailyTask, DailyTaskCompletion } from "../../types";
 
 export interface DailyTaskRepository {
-  create(name: string, frequencyDays: number, startDate?: string): Promise<DailyTask>;
+  create(
+    name: string,
+    frequencyDays: number,
+    startDate?: string,
+  ): Promise<DailyTask>;
   getById(id: number): Promise<DailyTask | null>;
   listAll(): Promise<DailyTask[]>;
   update(

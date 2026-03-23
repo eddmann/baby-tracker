@@ -71,11 +71,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        {isLoading ? (
-          <Spinner size={size} />
-        ) : (
-          children
-        )}
+        {isLoading ? <Spinner size={size} /> : children}
       </button>
     );
   },

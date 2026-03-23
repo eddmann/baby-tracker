@@ -46,14 +46,25 @@ function DeleteButton({ onDelete }: { onDelete: () => Promise<void> }) {
 // ─── Sleep ───────────────────────────────────────────────
 
 interface EditSleepModalProps {
-  entry: { id: number; started_at: string; ended_at: string | null; notes: string | null } | null;
+  entry: {
+    id: number;
+    started_at: string;
+    ended_at: string | null;
+    notes: string | null;
+  } | null;
   isOpen: boolean;
   onClose: () => void;
   onSaved: () => void;
   onDeleted: () => void;
 }
 
-export function EditSleepModal({ entry, isOpen, onClose, onSaved, onDeleted }: EditSleepModalProps) {
+export function EditSleepModal({
+  entry,
+  isOpen,
+  onClose,
+  onSaved,
+  onDeleted,
+}: EditSleepModalProps) {
   const [startedAt, setStartedAt] = useState("");
   const [endedAt, setEndedAt] = useState("");
   const [notes, setNotes] = useState("");
@@ -78,23 +89,46 @@ export function EditSleepModal({ entry, isOpen, onClose, onSaved, onDeleted }: E
     });
     setSaving(false);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Sleep updated"); onSaved(); }
+    else {
+      showToast("success", "Sleep updated");
+      onSaved();
+    }
   };
 
   const handleDelete = async () => {
     if (!entry) return;
     const res = await api.deleteSleep(entry.id);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Sleep deleted"); onDeleted(); }
+    else {
+      showToast("success", "Sleep deleted");
+      onDeleted();
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Sleep">
       <div className="space-y-4">
-        <Input label="Started" type="datetime-local" value={startedAt} onChange={(e) => setStartedAt(e.target.value)} />
-        <Input label="Ended" type="datetime-local" value={endedAt} onChange={(e) => setEndedAt(e.target.value)} />
-        <Input label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any notes..." />
-        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>Save</Button>
+        <Input
+          label="Started"
+          type="datetime-local"
+          value={startedAt}
+          onChange={(e) => setStartedAt(e.target.value)}
+        />
+        <Input
+          label="Ended"
+          type="datetime-local"
+          value={endedAt}
+          onChange={(e) => setEndedAt(e.target.value)}
+        />
+        <Input
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Any notes..."
+        />
+        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>
+          Save
+        </Button>
         <DeleteButton onDelete={handleDelete} />
       </div>
     </Modal>
@@ -119,7 +153,13 @@ interface EditFeedModalProps {
   onDeleted: () => void;
 }
 
-export function EditFeedModal({ entry, isOpen, onClose, onSaved, onDeleted }: EditFeedModalProps) {
+export function EditFeedModal({
+  entry,
+  isOpen,
+  onClose,
+  onSaved,
+  onDeleted,
+}: EditFeedModalProps) {
   const [startedAt, setStartedAt] = useState("");
   const [endedAt, setEndedAt] = useState("");
   const [side, setSide] = useState<"left" | "right">("left");
@@ -157,25 +197,43 @@ export function EditFeedModal({ entry, isOpen, onClose, onSaved, onDeleted }: Ed
     const res = await api.updateFeed(entry.id, fields);
     setSaving(false);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Feed updated"); onSaved(); }
+    else {
+      showToast("success", "Feed updated");
+      onSaved();
+    }
   };
 
   const handleDelete = async () => {
     if (!entry) return;
     const res = await api.deleteFeed(entry.id);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Feed deleted"); onDeleted(); }
+    else {
+      showToast("success", "Feed deleted");
+      onDeleted();
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Feed">
       <div className="space-y-4">
-        <Input label="Started" type="datetime-local" value={startedAt} onChange={(e) => setStartedAt(e.target.value)} />
+        <Input
+          label="Started"
+          type="datetime-local"
+          value={startedAt}
+          onChange={(e) => setStartedAt(e.target.value)}
+        />
         {isBreast && (
           <>
-            <Input label="Ended" type="datetime-local" value={endedAt} onChange={(e) => setEndedAt(e.target.value)} />
+            <Input
+              label="Ended"
+              type="datetime-local"
+              value={endedAt}
+              onChange={(e) => setEndedAt(e.target.value)}
+            />
             <div className="space-y-1.5">
-              <label className="block text-[13px] font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">Side</label>
+              <label className="block text-[13px] font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                Side
+              </label>
               <div className="grid grid-cols-2 gap-2">
                 {(["left", "right"] as const).map((s) => (
                   <button
@@ -196,10 +254,24 @@ export function EditFeedModal({ entry, isOpen, onClose, onSaved, onDeleted }: Ed
           </>
         )}
         {!isBreast && (
-          <Input label="Amount (ml)" type="number" inputMode="numeric" value={amountMl} onChange={(e) => setAmountMl(e.target.value)} placeholder="e.g. 120" />
+          <Input
+            label="Amount (ml)"
+            type="number"
+            inputMode="numeric"
+            value={amountMl}
+            onChange={(e) => setAmountMl(e.target.value)}
+            placeholder="e.g. 120"
+          />
         )}
-        <Input label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any notes..." />
-        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>Save</Button>
+        <Input
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Any notes..."
+        />
+        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>
+          Save
+        </Button>
         <DeleteButton onDelete={handleDelete} />
       </div>
     </Modal>
@@ -209,14 +281,25 @@ export function EditFeedModal({ entry, isOpen, onClose, onSaved, onDeleted }: Ed
 // ─── Nappy ───────────────────────────────────────────────
 
 interface EditNappyModalProps {
-  entry: { id: number; type: string; occurred_at: string; notes: string | null } | null;
+  entry: {
+    id: number;
+    type: string;
+    occurred_at: string;
+    notes: string | null;
+  } | null;
   isOpen: boolean;
   onClose: () => void;
   onSaved: () => void;
   onDeleted: () => void;
 }
 
-export function EditNappyModal({ entry, isOpen, onClose, onSaved, onDeleted }: EditNappyModalProps) {
+export function EditNappyModal({
+  entry,
+  isOpen,
+  onClose,
+  onSaved,
+  onDeleted,
+}: EditNappyModalProps) {
   const [type, setType] = useState<"wet" | "dirty" | "both">("wet");
   const [occurredAt, setOccurredAt] = useState("");
   const [notes, setNotes] = useState("");
@@ -232,9 +315,21 @@ export function EditNappyModal({ entry, isOpen, onClose, onSaved, onDeleted }: E
   }, [entry]);
 
   const typeConfig = {
-    wet: { color: "text-[var(--color-accent)]", bg: "bg-[var(--color-accent)]", label: "Wet" },
-    dirty: { color: "text-[var(--color-warning)]", bg: "bg-[var(--color-warning)]", label: "Dirty" },
-    both: { color: "text-[var(--color-danger)]", bg: "bg-[var(--color-danger)]", label: "Both" },
+    wet: {
+      color: "text-[var(--color-accent)]",
+      bg: "bg-[var(--color-accent)]",
+      label: "Wet",
+    },
+    dirty: {
+      color: "text-[var(--color-warning)]",
+      bg: "bg-[var(--color-warning)]",
+      label: "Dirty",
+    },
+    both: {
+      color: "text-[var(--color-danger)]",
+      bg: "bg-[var(--color-danger)]",
+      label: "Both",
+    },
   };
 
   const handleSave = async () => {
@@ -247,21 +342,29 @@ export function EditNappyModal({ entry, isOpen, onClose, onSaved, onDeleted }: E
     });
     setSaving(false);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Nappy updated"); onSaved(); }
+    else {
+      showToast("success", "Nappy updated");
+      onSaved();
+    }
   };
 
   const handleDelete = async () => {
     if (!entry) return;
     const res = await api.deleteNappy(entry.id);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Nappy deleted"); onDeleted(); }
+    else {
+      showToast("success", "Nappy deleted");
+      onDeleted();
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Nappy">
       <div className="space-y-4">
         <div className="space-y-1.5">
-          <label className="block text-[13px] font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">Type</label>
+          <label className="block text-[13px] font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+            Type
+          </label>
           <div className="grid grid-cols-3 gap-2">
             {(["wet", "dirty", "both"] as const).map((t) => {
               const config = typeConfig[t];
@@ -282,9 +385,21 @@ export function EditNappyModal({ entry, isOpen, onClose, onSaved, onDeleted }: E
             })}
           </div>
         </div>
-        <Input label="Time" type="datetime-local" value={occurredAt} onChange={(e) => setOccurredAt(e.target.value)} />
-        <Input label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any notes..." />
-        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>Save</Button>
+        <Input
+          label="Time"
+          type="datetime-local"
+          value={occurredAt}
+          onChange={(e) => setOccurredAt(e.target.value)}
+        />
+        <Input
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Any notes..."
+        />
+        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>
+          Save
+        </Button>
         <DeleteButton onDelete={handleDelete} />
       </div>
     </Modal>
@@ -307,7 +422,13 @@ interface EditPumpModalProps {
   onDeleted: () => void;
 }
 
-export function EditPumpModal({ entry, isOpen, onClose, onSaved, onDeleted }: EditPumpModalProps) {
+export function EditPumpModal({
+  entry,
+  isOpen,
+  onClose,
+  onSaved,
+  onDeleted,
+}: EditPumpModalProps) {
   const [startedAt, setStartedAt] = useState("");
   const [endedAt, setEndedAt] = useState("");
   const [amountMl, setAmountMl] = useState("");
@@ -337,24 +458,54 @@ export function EditPumpModal({ entry, isOpen, onClose, onSaved, onDeleted }: Ed
     const res = await api.updatePump(entry.id, fields);
     setSaving(false);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Pump updated"); onSaved(); }
+    else {
+      showToast("success", "Pump updated");
+      onSaved();
+    }
   };
 
   const handleDelete = async () => {
     if (!entry) return;
     const res = await api.deletePump(entry.id);
     if (res.error) showToast("error", res.error);
-    else { showToast("success", "Pump deleted"); onDeleted(); }
+    else {
+      showToast("success", "Pump deleted");
+      onDeleted();
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Pump">
       <div className="space-y-4">
-        <Input label="Started" type="datetime-local" value={startedAt} onChange={(e) => setStartedAt(e.target.value)} />
-        <Input label="Ended" type="datetime-local" value={endedAt} onChange={(e) => setEndedAt(e.target.value)} />
-        <Input label="Amount (ml)" type="number" inputMode="numeric" value={amountMl} onChange={(e) => setAmountMl(e.target.value)} placeholder="e.g. 60" />
-        <Input label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Any notes..." />
-        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>Save</Button>
+        <Input
+          label="Started"
+          type="datetime-local"
+          value={startedAt}
+          onChange={(e) => setStartedAt(e.target.value)}
+        />
+        <Input
+          label="Ended"
+          type="datetime-local"
+          value={endedAt}
+          onChange={(e) => setEndedAt(e.target.value)}
+        />
+        <Input
+          label="Amount (ml)"
+          type="number"
+          inputMode="numeric"
+          value={amountMl}
+          onChange={(e) => setAmountMl(e.target.value)}
+          placeholder="e.g. 60"
+        />
+        <Input
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Any notes..."
+        />
+        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>
+          Save
+        </Button>
         <DeleteButton onDelete={handleDelete} />
       </div>
     </Modal>

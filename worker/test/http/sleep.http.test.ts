@@ -178,11 +178,22 @@ describe("HTTP /api/sleep", () => {
     const newEnd = "2025-01-01T11:30:00.000Z";
 
     const { res, body } = await requestJson<{
-      data: { entry: { started_at: string; ended_at: string; notes: string; duration_seconds: number } };
+      data: {
+        entry: {
+          started_at: string;
+          ended_at: string;
+          notes: string;
+          duration_seconds: number;
+        };
+      };
     }>(env, `/api/sleep/${entry.id}`, {
       method: "PUT",
       headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ started_at: newStart, ended_at: newEnd, notes: "edited" }),
+      body: JSON.stringify({
+        started_at: newStart,
+        ended_at: newEnd,
+        notes: "edited",
+      }),
     });
 
     expect(res.status).toBe(200);
@@ -196,7 +207,10 @@ describe("HTTP /api/sleep", () => {
     const env = await createHttpEnv();
     const token = await authenticateWithPin(env);
 
-    const entry = await insertSleepEntry(env, { status: "active", ended_at: null });
+    const entry = await insertSleepEntry(env, {
+      status: "active",
+      ended_at: null,
+    });
 
     const { res } = await requestJson(env, `/api/sleep/${entry.id}`, {
       method: "PUT",

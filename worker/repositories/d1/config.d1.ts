@@ -4,9 +4,7 @@ import type { ConfigRepository } from "../interfaces/config.repository";
 export function createD1ConfigRepository(env: Env): ConfigRepository {
   return {
     async get(key: string): Promise<string | null> {
-      const row = await env.DB.prepare(
-        "SELECT value FROM config WHERE key = ?",
-      )
+      const row = await env.DB.prepare("SELECT value FROM config WHERE key = ?")
         .bind(key)
         .first<{ value: string }>();
       return row?.value ?? null;

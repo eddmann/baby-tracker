@@ -184,7 +184,13 @@ export async function insertDailyTask(
     `INSERT INTO daily_tasks (id, name, frequency_days, start_date, created_at)
      VALUES (?, ?, ?, ?, ?)`,
   )
-    .bind(task.id, task.name, task.frequency_days, task.start_date, task.created_at)
+    .bind(
+      task.id,
+      task.name,
+      task.frequency_days,
+      task.start_date,
+      task.created_at,
+    )
     .run();
   return task;
 }

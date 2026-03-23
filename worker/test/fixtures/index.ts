@@ -10,7 +10,10 @@ import { resetSleepIdCounter } from "./sleep.fixture";
 import { resetFeedIdCounter } from "./feed.fixture";
 import { resetNappyIdCounter } from "./nappy.fixture";
 import { resetPumpIdCounter } from "./pump.fixture";
-import { resetDailyTaskIdCounter, resetDailyTaskCompletionIdCounter } from "./dailyTask.fixture";
+import {
+  resetDailyTaskIdCounter,
+  resetDailyTaskCompletionIdCounter,
+} from "./dailyTask.fixture";
 
 export function resetAllFixtureCounters(): void {
   resetSessionIdCounter();

@@ -133,9 +133,16 @@ pump.put("/:id", zValidator("json", editSchema), async (c) => {
   // Recalculate duration if times changed
   const startedAt = (updates.started_at as string) ?? entry.started_at;
   const endedAt = (updates.ended_at as string) ?? entry.ended_at;
-  if ((body.started_at !== undefined || body.ended_at !== undefined) && endedAt) {
+  if (
+    (body.started_at !== undefined || body.ended_at !== undefined) &&
+    endedAt
+  ) {
     const pauses: Pause[] = JSON.parse(entry.pauses);
-    updates.duration_seconds = calculateElapsedSeconds(startedAt, pauses, endedAt);
+    updates.duration_seconds = calculateElapsedSeconds(
+      startedAt,
+      pauses,
+      endedAt,
+    );
   }
 
   await repo.update(id, updates);

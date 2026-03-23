@@ -11,7 +11,14 @@ import { Input } from "../components/ui/Input";
 import { Modal } from "../components/ui/Modal";
 import { useToast } from "../components/ui/Toast";
 import { TimerDisplay } from "../components/Timer";
-import { cn, formatDuration, formatRelativeDay, formatTime, formatTimeSince, getToday } from "../lib/utils";
+import {
+  cn,
+  formatDuration,
+  formatRelativeDay,
+  formatTime,
+  formatTimeSince,
+  getToday,
+} from "../lib/utils";
 import * as api from "../lib/api";
 import { Baby, Milk, Droplets } from "lucide-react";
 import { EditFeedModal } from "../components/EditEntryModals";
@@ -59,7 +66,9 @@ export default function Feed() {
       api.getFeedEntries(),
     ]);
     setActive((activeRes.data?.entry as unknown as FeedEntry) ?? null);
-    setEntries((listRes.data?.entries as unknown as unknown as FeedEntry[]) ?? []);
+    setEntries(
+      (listRes.data?.entries as unknown as unknown as FeedEntry[]) ?? [],
+    );
     setIsLoading(false);
   }, []);
 
@@ -140,7 +149,9 @@ export default function Feed() {
   const lastCompleted = todayFeeds[0];
   const hoursSinceLast = lastCompleted
     ? (Date.now() -
-        new Date(lastCompleted.ended_at || lastCompleted.started_at).getTime()) /
+        new Date(
+          lastCompleted.ended_at || lastCompleted.started_at,
+        ).getTime()) /
       3600000
     : null;
 
@@ -276,7 +287,12 @@ export default function Feed() {
             .filter((e) => e.status === "completed")
             .slice(0, 20)
             .map((entry) => (
-              <Card key={entry.id} padding="sm" className="cursor-pointer press-effect" onClick={() => setEditingEntry(entry)}>
+              <Card
+                key={entry.id}
+                padding="sm"
+                className="cursor-pointer press-effect"
+                onClick={() => setEditingEntry(entry)}
+              >
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[15px] font-medium text-[var(--color-text-primary)]">
@@ -316,8 +332,14 @@ export default function Feed() {
         entry={editingEntry}
         isOpen={!!editingEntry}
         onClose={() => setEditingEntry(null)}
-        onSaved={() => { setEditingEntry(null); refresh(); }}
-        onDeleted={() => { setEditingEntry(null); refresh(); }}
+        onSaved={() => {
+          setEditingEntry(null);
+          refresh();
+        }}
+        onDeleted={() => {
+          setEditingEntry(null);
+          refresh();
+        }}
       />
 
       {/* Amount Modal */}

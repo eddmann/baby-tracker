@@ -45,7 +45,10 @@ export default function Dashboard() {
     if (response.error) {
       showToast("error", response.error);
     } else {
-      showToast("success", `${type.charAt(0).toUpperCase() + type.slice(1)} nappy logged`);
+      showToast(
+        "success",
+        `${type.charAt(0).toUpperCase() + type.slice(1)} nappy logged`,
+      );
       refresh();
     }
     setShowQuickAdd(false);
@@ -125,19 +128,25 @@ export default function Dashboard() {
             const entry = timer.entry;
             const entryId = entry.id as number;
             const status = entry.status as "active" | "paused";
-            const pauses = JSON.parse(
-              (entry.pauses as string) || "[]",
-            );
+            const pauses = JSON.parse((entry.pauses as string) || "[]");
 
             return (
-              <Card key={`${timer.type}-${entryId}`} variant="elevated" padding="lg">
+              <Card
+                key={`${timer.type}-${entryId}`}
+                variant="elevated"
+                padding="lg"
+              >
                 <TimerDisplay
                   startedAt={entry.started_at as string}
                   pauses={pauses}
                   status={status}
                   label={timerLabel(timer.type, entry)}
-                  onPause={() => handleTimerAction(timer.type, entryId, "pause")}
-                  onResume={() => handleTimerAction(timer.type, entryId, "resume")}
+                  onPause={() =>
+                    handleTimerAction(timer.type, entryId, "pause")
+                  }
+                  onResume={() =>
+                    handleTimerAction(timer.type, entryId, "resume")
+                  }
                   onStop={() => handleTimerAction(timer.type, entryId, "stop")}
                 />
               </Card>
@@ -220,13 +229,15 @@ export default function Dashboard() {
                 Daily Tasks
               </p>
               <p className="text-[13px] text-[var(--color-text-secondary)]">
-                {dailyTasks.completed_count} of {dailyTasks.due_count} due tasks done
+                {dailyTasks.completed_count} of {dailyTasks.due_count} due tasks
+                done
               </p>
             </div>
             <p
               className={cn(
                 "text-[22px] font-bold tabular-nums",
-                dailyTasks.completed_count >= dailyTasks.due_count && dailyTasks.due_count > 0
+                dailyTasks.completed_count >= dailyTasks.due_count &&
+                  dailyTasks.due_count > 0
                   ? "text-[var(--color-success)]"
                   : dailyTasks.completed_count > 0
                     ? "text-[var(--color-warning)]"
@@ -354,9 +365,9 @@ function TimeSinceCard({
   onClick: () => void;
 }) {
   const time = entry
-    ? ((entry.ended_at as string) ||
-        (entry.occurred_at as string) ||
-        (entry.started_at as string))
+    ? (entry.ended_at as string) ||
+      (entry.occurred_at as string) ||
+      (entry.started_at as string)
     : null;
 
   return (

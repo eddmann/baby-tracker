@@ -11,22 +11,18 @@ const breastStartSchema = z.object({
   side: z.enum(["left", "right"]),
 });
 
-feed.post(
-  "/breast/start",
-  zValidator("json", breastStartSchema),
-  async (c) => {
-    const body = c.req.valid("json");
-    const repo = createD1FeedRepository(c.env);
+feed.post("/breast/start", zValidator("json", breastStartSchema), async (c) => {
+  const body = c.req.valid("json");
+  const repo = createD1FeedRepository(c.env);
 
-    const active = await repo.getActive();
-    if (active) {
-      return c.json({ error: "A feed timer is already running" }, 409);
-    }
+  const active = await repo.getActive();
+  if (active) {
+    return c.json({ error: "A feed timer is already running" }, 409);
+  }
 
-    const entry = await repo.createBreast(body.side);
-    return c.json({ data: { entry } });
-  },
-);
+  const entry = await repo.createBreast(body.side);
+  return c.json({ data: { entry } });
+});
 
 const formulaSchema = z.object({
   amount_ml: z.number().positive(),
@@ -165,9 +161,16 @@ feed.put("/:id", zValidator("json", editSchema), async (c) => {
   // Recalculate duration if times changed (breast feeds)
   const startedAt = (updates.started_at as string) ?? entry.started_at;
   const endedAt = (updates.ended_at as string) ?? entry.ended_at;
-  if ((body.started_at !== undefined || body.ended_at !== undefined) && endedAt) {
+  if (
+    (body.started_at !== undefined || body.ended_at !== undefined) &&
+    endedAt
+  ) {
     const pauses: Pause[] = JSON.parse(entry.pauses);
-    updates.duration_seconds = calculateElapsedSeconds(startedAt, pauses, endedAt);
+    updates.duration_seconds = calculateElapsedSeconds(
+      startedAt,
+      pauses,
+      endedAt,
+    );
   }
 
   await repo.update(id, updates);

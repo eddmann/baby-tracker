@@ -3,7 +3,11 @@ import type { DailyTaskRepository } from "../interfaces/dailyTask.repository";
 
 export function createD1DailyTaskRepository(env: Env): DailyTaskRepository {
   return {
-    async create(name: string, frequencyDays: number, startDate?: string): Promise<DailyTask> {
+    async create(
+      name: string,
+      frequencyDays: number,
+      startDate?: string,
+    ): Promise<DailyTask> {
       const now = new Date().toISOString();
       const row = await env.DB.prepare(
         "INSERT INTO daily_tasks (name, frequency_days, start_date, created_at) VALUES (?, ?, ?, ?) RETURNING *",
@@ -14,9 +18,7 @@ export function createD1DailyTaskRepository(env: Env): DailyTaskRepository {
     },
 
     async getById(id: number): Promise<DailyTask | null> {
-      const row = await env.DB.prepare(
-        "SELECT * FROM daily_tasks WHERE id = ?",
-      )
+      const row = await env.DB.prepare("SELECT * FROM daily_tasks WHERE id = ?")
         .bind(id)
         .first<DailyTask>();
       return row ?? null;
@@ -31,7 +33,9 @@ export function createD1DailyTaskRepository(env: Env): DailyTaskRepository {
 
     async update(
       id: number,
-      updates: Partial<Pick<DailyTask, "name" | "frequency_days" | "start_date">>,
+      updates: Partial<
+        Pick<DailyTask, "name" | "frequency_days" | "start_date">
+      >,
     ): Promise<void> {
       const fields: string[] = [];
       const values: unknown[] = [];

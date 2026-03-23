@@ -39,9 +39,8 @@ Timer state is server-authoritative — both users see active timers via dashboa
 ## Development
 
 ```bash
-make start             # Start local dev server
-make test              # Run all tests
-make typecheck         # Type check
+make start             # Install deps, migrate, run dev server
+make can-release       # CI gate — lint + test
 make build             # Build for production
 ```
 

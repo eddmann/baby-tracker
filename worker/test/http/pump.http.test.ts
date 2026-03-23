@@ -147,7 +147,10 @@ describe("HTTP /api/pump", () => {
     const env = await createHttpEnv();
     const token = await authenticateWithPin(env);
 
-    const entry = await insertPumpEntry(env, { status: "active", ended_at: null });
+    const entry = await insertPumpEntry(env, {
+      status: "active",
+      ended_at: null,
+    });
 
     const { res } = await requestJson(env, `/api/pump/${entry.id}`, {
       method: "PUT",

@@ -2,7 +2,11 @@ import type { FeedEntry, FeedType, BreastSide } from "../../types";
 
 export interface FeedRepository {
   createBreast(side: BreastSide): Promise<FeedEntry>;
-  createInstant(type: FeedType, amountMl: number, notes?: string | null): Promise<FeedEntry>;
+  createInstant(
+    type: FeedType,
+    amountMl: number,
+    notes?: string | null,
+  ): Promise<FeedEntry>;
   getById(id: number): Promise<FeedEntry | null>;
   getActive(): Promise<FeedEntry | null>;
   update(id: number, updates: Partial<FeedEntry>): Promise<void>;

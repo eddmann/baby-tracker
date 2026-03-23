@@ -14,10 +14,7 @@ export function notFound(entity: string, id?: number): UseCaseError {
   };
 }
 
-export function validationError(
-  message: string,
-  field?: string,
-): UseCaseError {
+export function validationError(message: string, field?: string): UseCaseError {
   return { code: "VALIDATION_ERROR", message, field };
 }
 

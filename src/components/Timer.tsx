@@ -19,10 +19,7 @@ interface TimerDisplayProps {
   className?: string;
 }
 
-function calculateElapsed(
-  startedAt: string,
-  pauses: Pause_[],
-): number {
+function calculateElapsed(startedAt: string, pauses: Pause_[]): number {
   const start = new Date(startedAt).getTime();
   const now = Date.now();
 

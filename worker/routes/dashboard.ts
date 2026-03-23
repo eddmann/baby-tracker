@@ -58,11 +58,15 @@ dashboard.get("/", async (c) => {
     activeTimers.push({ type: "pump" as const, entry: activePump });
 
   // Daily tasks summary
-  const todayCompletedTaskIds = new Set(todayTaskCompletions.map((c) => c.task_id));
+  const todayCompletedTaskIds = new Set(
+    todayTaskCompletions.map((c) => c.task_id),
+  );
   let lastCompletionMap: Map<number, string> | null = null;
   if (allTasks.length > 0) {
     const lastCompletions = await dailyTaskRepo.getLastCompletionPerTask();
-    lastCompletionMap = new Map(lastCompletions.map((r) => [r.task_id, r.last_completed_at]));
+    lastCompletionMap = new Map(
+      lastCompletions.map((r) => [r.task_id, r.last_completed_at]),
+    );
   }
   let dueCount = 0;
   for (const task of allTasks) {
@@ -72,7 +76,9 @@ dashboard.get("/", async (c) => {
       const nextDueDate = task.start_date ?? localToday;
       isDue = nextDueDate <= localToday;
     } else {
-      const lastLocal = new Date(new Date(lastCompletedAt).getTime() + tz * 60_000);
+      const lastLocal = new Date(
+        new Date(lastCompletedAt).getTime() + tz * 60_000,
+      );
       const lastDate = lastLocal.toISOString().slice(0, 10);
       const nextDue = new Date(`${lastDate}T00:00:00.000Z`);
       nextDue.setDate(nextDue.getDate() + task.frequency_days);

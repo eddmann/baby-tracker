@@ -14,9 +14,7 @@ function nextIdWithOverride(overrideId?: number): number {
   return pumpIdCounter++;
 }
 
-export function createPumpEntry(
-  overrides: Partial<PumpEntry> = {},
-): PumpEntry {
+export function createPumpEntry(overrides: Partial<PumpEntry> = {}): PumpEntry {
   const id = nextIdWithOverride(overrides.id);
   return {
     id,

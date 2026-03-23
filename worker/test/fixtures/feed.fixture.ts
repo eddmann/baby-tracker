@@ -14,9 +14,7 @@ function nextIdWithOverride(overrideId?: number): number {
   return feedIdCounter++;
 }
 
-export function createFeedEntry(
-  overrides: Partial<FeedEntry> = {},
-): FeedEntry {
+export function createFeedEntry(overrides: Partial<FeedEntry> = {}): FeedEntry {
   const id = nextIdWithOverride(overrides.id);
   return {
     id,

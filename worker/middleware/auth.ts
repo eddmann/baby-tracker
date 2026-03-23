@@ -74,10 +74,7 @@ export async function hashPin(pin: string): Promise<string> {
   return toHex(salt) + ":" + toHex(new Uint8Array(hash));
 }
 
-export async function verifyPin(
-  pin: string,
-  stored: string,
-): Promise<boolean> {
+export async function verifyPin(pin: string, stored: string): Promise<boolean> {
   const [saltHex, hashHex] = stored.split(":");
   if (!saltHex || !hashHex) {
     return false;

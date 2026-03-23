@@ -165,7 +165,11 @@ export default function DailyTasks() {
               </h2>
               <div className="space-y-2">
                 {completedTasks.map((task) => (
-                  <Card key={task.id} padding="sm" className="press-effect opacity-75">
+                  <Card
+                    key={task.id}
+                    padding="sm"
+                    className="press-effect opacity-75"
+                  >
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => handleToggleComplete(task)}
@@ -199,7 +203,11 @@ export default function DailyTasks() {
               </h2>
               <div className="space-y-2">
                 {upcomingTasks.map((task) => (
-                  <Card key={task.id} padding="sm" className="press-effect opacity-60">
+                  <Card
+                    key={task.id}
+                    padding="sm"
+                    className="press-effect opacity-60"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="text-[var(--color-text-tertiary)] shrink-0">
                         <Circle className="w-6 h-6" />
@@ -212,7 +220,8 @@ export default function DailyTasks() {
                           {task.name}
                         </p>
                         <p className="text-[13px] text-[var(--color-text-tertiary)]">
-                          {formatFrequency(task.frequency_days)} &middot; {daysUntilDue(task.next_due_date)}
+                          {formatFrequency(task.frequency_days)} &middot;{" "}
+                          {daysUntilDue(task.next_due_date)}
                         </p>
                       </div>
                     </div>
@@ -279,7 +288,11 @@ function AddTaskModal({
     if (!name.trim()) return;
     const freq = parseInt(frequency) || 1;
     setSaving(true);
-    const res = await api.createDailyTask(name.trim(), freq, startDate || undefined);
+    const res = await api.createDailyTask(
+      name.trim(),
+      freq,
+      startDate || undefined,
+    );
     setSaving(false);
     if (res.error) {
       showToast("error", res.error);

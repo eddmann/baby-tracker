@@ -5,7 +5,13 @@ import {
   EmptyState,
 } from "../components/layout/AppShell";
 import { Card } from "../components/ui/Card";
-import { cn, formatTime, formatDate, formatDuration, getToday } from "../lib/utils";
+import {
+  cn,
+  formatTime,
+  formatDate,
+  formatDuration,
+  getToday,
+} from "../lib/utils";
 import * as api from "../lib/api";
 import {
   Moon,
@@ -22,6 +28,20 @@ import {
   EditNappyModal,
   EditPumpModal,
 } from "../components/EditEntryModals";
+import type { ComponentProps } from "react";
+
+type EditSleepModal_Entry = NonNullable<
+  ComponentProps<typeof EditSleepModal>["entry"]
+>;
+type EditFeedModal_Entry = NonNullable<
+  ComponentProps<typeof EditFeedModal>["entry"]
+>;
+type EditNappyModal_Entry = NonNullable<
+  ComponentProps<typeof EditNappyModal>["entry"]
+>;
+type EditPumpModal_Entry = NonNullable<
+  ComponentProps<typeof EditPumpModal>["entry"]
+>;
 
 interface TimelineEvent {
   type: "sleep" | "feed" | "nappy" | "pump";
@@ -161,7 +181,12 @@ export default function History() {
           {events.map((event, idx) => {
             const config = eventConfig[event.type];
             return (
-              <Card key={idx} padding="sm" className="cursor-pointer press-effect" onClick={() => setEditingEvent(event)}>
+              <Card
+                key={idx}
+                padding="sm"
+                className="cursor-pointer press-effect"
+                onClick={() => setEditingEvent(event)}
+              >
                 <div className="flex items-center gap-3">
                   <div
                     className={cn(
@@ -191,38 +216,62 @@ export default function History() {
       )}
       {editingEvent?.type === "sleep" && (
         <EditSleepModal
-          entry={editingEvent.entry as any}
+          entry={editingEvent.entry as EditSleepModal_Entry}
           isOpen
           onClose={() => setEditingEvent(null)}
-          onSaved={() => { setEditingEvent(null); refresh(); }}
-          onDeleted={() => { setEditingEvent(null); refresh(); }}
+          onSaved={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
+          onDeleted={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
         />
       )}
       {editingEvent?.type === "feed" && (
         <EditFeedModal
-          entry={editingEvent.entry as any}
+          entry={editingEvent.entry as EditFeedModal_Entry}
           isOpen
           onClose={() => setEditingEvent(null)}
-          onSaved={() => { setEditingEvent(null); refresh(); }}
-          onDeleted={() => { setEditingEvent(null); refresh(); }}
+          onSaved={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
+          onDeleted={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
         />
       )}
       {editingEvent?.type === "nappy" && (
         <EditNappyModal
-          entry={editingEvent.entry as any}
+          entry={editingEvent.entry as EditNappyModal_Entry}
           isOpen
           onClose={() => setEditingEvent(null)}
-          onSaved={() => { setEditingEvent(null); refresh(); }}
-          onDeleted={() => { setEditingEvent(null); refresh(); }}
+          onSaved={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
+          onDeleted={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
         />
       )}
       {editingEvent?.type === "pump" && (
         <EditPumpModal
-          entry={editingEvent.entry as any}
+          entry={editingEvent.entry as EditPumpModal_Entry}
           isOpen
           onClose={() => setEditingEvent(null)}
-          onSaved={() => { setEditingEvent(null); refresh(); }}
-          onDeleted={() => { setEditingEvent(null); refresh(); }}
+          onSaved={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
+          onDeleted={() => {
+            setEditingEvent(null);
+            refresh();
+          }}
         />
       )}
     </PageContainer>

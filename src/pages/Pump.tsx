@@ -43,9 +43,9 @@ export default function Pump() {
     ]);
     setActive((activeRes.data?.entry as unknown as PumpEntry) ?? null);
     setEntries(
-      ((listRes.data?.entries as unknown as unknown as PumpEntry[]) ?? []).filter(
-        (e) => e.status === "completed",
-      ),
+      (
+        (listRes.data?.entries as unknown as unknown as PumpEntry[]) ?? []
+      ).filter((e) => e.status === "completed"),
     );
     setIsLoading(false);
   }, []);
@@ -85,11 +85,7 @@ export default function Pump() {
   const handleStopConfirm = async () => {
     if (!active) return;
     const amount = amountMl ? parseInt(amountMl) : undefined;
-    const res = await api.stopPump(
-      active.id,
-      amount,
-      notes || undefined,
-    );
+    const res = await api.stopPump(active.id, amount, notes || undefined);
     if (res.error) {
       showToast("error", res.error);
     } else {
@@ -137,7 +133,12 @@ export default function Pump() {
       ) : (
         <div className="space-y-2">
           {entries.slice(0, 20).map((entry) => (
-            <Card key={entry.id} padding="sm" className="cursor-pointer press-effect" onClick={() => setEditingEntry(entry)}>
+            <Card
+              key={entry.id}
+              padding="sm"
+              className="cursor-pointer press-effect"
+              onClick={() => setEditingEntry(entry)}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[15px] font-medium text-[var(--color-text-primary)]">
@@ -177,8 +178,14 @@ export default function Pump() {
         entry={editingEntry}
         isOpen={!!editingEntry}
         onClose={() => setEditingEntry(null)}
-        onSaved={() => { setEditingEntry(null); refresh(); }}
-        onDeleted={() => { setEditingEntry(null); refresh(); }}
+        onSaved={() => {
+          setEditingEntry(null);
+          refresh();
+        }}
+        onDeleted={() => {
+          setEditingEntry(null);
+          refresh();
+        }}
       />
 
       {/* Stop Pump Modal */}

@@ -31,16 +31,32 @@ history.get("/", async (c) => {
 
   // Build unified timeline
   type TimelineEvent =
-    | { type: "sleep"; time: string; entry: typeof sleeps[0] }
-    | { type: "feed"; time: string; entry: typeof feeds[0] }
-    | { type: "nappy"; time: string; entry: typeof nappies[0] }
-    | { type: "pump"; time: string; entry: typeof pumps[0] };
+    | { type: "sleep"; time: string; entry: (typeof sleeps)[0] }
+    | { type: "feed"; time: string; entry: (typeof feeds)[0] }
+    | { type: "nappy"; time: string; entry: (typeof nappies)[0] }
+    | { type: "pump"; time: string; entry: (typeof pumps)[0] };
 
   const events: TimelineEvent[] = [
-    ...sleeps.map((e) => ({ type: "sleep" as const, time: e.started_at, entry: e })),
-    ...feeds.map((e) => ({ type: "feed" as const, time: e.started_at, entry: e })),
-    ...nappies.map((e) => ({ type: "nappy" as const, time: e.occurred_at, entry: e })),
-    ...pumps.map((e) => ({ type: "pump" as const, time: e.started_at, entry: e })),
+    ...sleeps.map((e) => ({
+      type: "sleep" as const,
+      time: e.started_at,
+      entry: e,
+    })),
+    ...feeds.map((e) => ({
+      type: "feed" as const,
+      time: e.started_at,
+      entry: e,
+    })),
+    ...nappies.map((e) => ({
+      type: "nappy" as const,
+      time: e.occurred_at,
+      entry: e,
+    })),
+    ...pumps.map((e) => ({
+      type: "pump" as const,
+      time: e.started_at,
+      entry: e,
+    })),
   ].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
 
   return c.json({ data: { date, events } });

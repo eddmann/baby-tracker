@@ -85,15 +85,21 @@ export async function getDashboard(): Promise<
 }
 
 // Sleep
-export async function startSleep(): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function startSleep(): Promise<
+  ApiResponse<{ entry: Record<string, unknown> }>
+> {
   return fetchApi("/sleep/start", { method: "POST" });
 }
 
-export async function pauseSleep(id: number): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function pauseSleep(
+  id: number,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
   return fetchApi(`/sleep/${id}/pause`, { method: "POST" });
 }
 
-export async function resumeSleep(id: number): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function resumeSleep(
+  id: number,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
   return fetchApi(`/sleep/${id}/resume`, { method: "POST" });
 }
 
@@ -123,10 +129,15 @@ export async function updateSleep(
   id: number,
   fields: { started_at?: string; ended_at?: string; notes?: string | null },
 ): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
-  return fetchApi(`/sleep/${id}`, { method: "PUT", body: JSON.stringify(fields) });
+  return fetchApi(`/sleep/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(fields),
+  });
 }
 
-export async function deleteSleep(id: number): Promise<ApiResponse<{ success: boolean }>> {
+export async function deleteSleep(
+  id: number,
+): Promise<ApiResponse<{ success: boolean }>> {
   return fetchApi(`/sleep/${id}`, { method: "DELETE" });
 }
 
@@ -160,11 +171,15 @@ export async function logExpressedFeed(
   });
 }
 
-export async function pauseFeed(id: number): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function pauseFeed(
+  id: number,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
   return fetchApi(`/feed/${id}/pause`, { method: "POST" });
 }
 
-export async function resumeFeed(id: number): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function resumeFeed(
+  id: number,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
   return fetchApi(`/feed/${id}/resume`, { method: "POST" });
 }
 
@@ -192,12 +207,23 @@ export async function getActiveFeed(): Promise<
 
 export async function updateFeed(
   id: number,
-  fields: { started_at?: string; ended_at?: string; side?: string; amount_ml?: number; notes?: string | null },
+  fields: {
+    started_at?: string;
+    ended_at?: string;
+    side?: string;
+    amount_ml?: number;
+    notes?: string | null;
+  },
 ): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
-  return fetchApi(`/feed/${id}`, { method: "PUT", body: JSON.stringify(fields) });
+  return fetchApi(`/feed/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(fields),
+  });
 }
 
-export async function deleteFeed(id: number): Promise<ApiResponse<{ success: boolean }>> {
+export async function deleteFeed(
+  id: number,
+): Promise<ApiResponse<{ success: boolean }>> {
   return fetchApi(`/feed/${id}`, { method: "DELETE" });
 }
 
@@ -222,23 +248,34 @@ export async function updateNappy(
   id: number,
   fields: { type?: string; occurred_at?: string; notes?: string | null },
 ): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
-  return fetchApi(`/nappy/${id}`, { method: "PUT", body: JSON.stringify(fields) });
+  return fetchApi(`/nappy/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(fields),
+  });
 }
 
-export async function deleteNappy(id: number): Promise<ApiResponse<{ success: boolean }>> {
+export async function deleteNappy(
+  id: number,
+): Promise<ApiResponse<{ success: boolean }>> {
   return fetchApi(`/nappy/${id}`, { method: "DELETE" });
 }
 
 // Pump
-export async function startPump(): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function startPump(): Promise<
+  ApiResponse<{ entry: Record<string, unknown> }>
+> {
   return fetchApi("/pump/start", { method: "POST" });
 }
 
-export async function pausePump(id: number): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function pausePump(
+  id: number,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
   return fetchApi(`/pump/${id}/pause`, { method: "POST" });
 }
 
-export async function resumePump(id: number): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+export async function resumePump(
+  id: number,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
   return fetchApi(`/pump/${id}/resume`, { method: "POST" });
 }
 
@@ -267,12 +304,22 @@ export async function getActivePump(): Promise<
 
 export async function updatePump(
   id: number,
-  fields: { started_at?: string; ended_at?: string; amount_ml?: number; notes?: string | null },
+  fields: {
+    started_at?: string;
+    ended_at?: string;
+    amount_ml?: number;
+    notes?: string | null;
+  },
 ): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
-  return fetchApi(`/pump/${id}`, { method: "PUT", body: JSON.stringify(fields) });
+  return fetchApi(`/pump/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(fields),
+  });
 }
 
-export async function deletePump(id: number): Promise<ApiResponse<{ success: boolean }>> {
+export async function deletePump(
+  id: number,
+): Promise<ApiResponse<{ success: boolean }>> {
   return fetchApi(`/pump/${id}`, { method: "DELETE" });
 }
 
@@ -290,13 +337,21 @@ export async function createDailyTask(
 ): Promise<ApiResponse<{ task: Record<string, unknown> }>> {
   return fetchApi("/daily-tasks", {
     method: "POST",
-    body: JSON.stringify({ name, frequency_days: frequencyDays, ...(startDate ? { start_date: startDate } : {}) }),
+    body: JSON.stringify({
+      name,
+      frequency_days: frequencyDays,
+      ...(startDate ? { start_date: startDate } : {}),
+    }),
   });
 }
 
 export async function updateDailyTask(
   id: number,
-  fields: { name?: string; frequency_days?: number; start_date?: string | null },
+  fields: {
+    name?: string;
+    frequency_days?: number;
+    start_date?: string | null;
+  },
 ): Promise<ApiResponse<{ task: Record<string, unknown> }>> {
   return fetchApi(`/daily-tasks/${id}`, {
     method: "PUT",

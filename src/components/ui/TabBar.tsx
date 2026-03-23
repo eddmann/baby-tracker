@@ -14,7 +14,11 @@ const tabs: TabItem[] = [
   { path: "/feed", label: "Feed", icon: <Baby className="w-6 h-6" /> },
   { path: "/nappy", label: "Nappy", icon: <CloudRain className="w-6 h-6" /> },
   { path: "/sleep", label: "Sleep", icon: <Moon className="w-6 h-6" /> },
-  { path: "/daily-tasks", label: "Tasks", icon: <ListChecks className="w-6 h-6" /> },
+  {
+    path: "/daily-tasks",
+    label: "Tasks",
+    icon: <ListChecks className="w-6 h-6" />,
+  },
 ];
 
 export function TabBar() {
@@ -92,9 +96,7 @@ export function FloatingActionButton({ onClick, icon, label }: FABProps) {
         "font-semibold",
       )}
     >
-      {icon || (
-        <Plus className="w-6 h-6" strokeWidth={2.5} />
-      )}
+      {icon || <Plus className="w-6 h-6" strokeWidth={2.5} />}
       {label && <span>{label}</span>}
     </button>
   );

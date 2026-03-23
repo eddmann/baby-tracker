@@ -156,7 +156,10 @@ describe("HTTP /api/feed", () => {
     const env = await createHttpEnv();
     const token = await authenticateWithPin(env);
 
-    const entry = await insertFeedEntry(env, { type: "formula", amount_ml: 100 });
+    const entry = await insertFeedEntry(env, {
+      type: "formula",
+      amount_ml: 100,
+    });
 
     const { res, body } = await requestJson<{
       data: { entry: { amount_ml: number; notes: string } };

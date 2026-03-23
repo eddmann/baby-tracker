@@ -25,9 +25,7 @@ function nextCompletionIdWithOverride(overrideId?: number): number {
   return completionIdCounter++;
 }
 
-export function createDailyTask(
-  overrides: Partial<DailyTask> = {},
-): DailyTask {
+export function createDailyTask(overrides: Partial<DailyTask> = {}): DailyTask {
   const id = nextTaskIdWithOverride(overrides.id);
   return {
     id,

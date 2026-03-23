@@ -47,9 +47,15 @@ export function formatRelativeDay(isoString: string): string {
   const entryDate = new Date(isoString);
   const now = new Date();
   // Compare calendar days in local time
-  const entryDay = new Date(entryDate.getFullYear(), entryDate.getMonth(), entryDate.getDate());
+  const entryDay = new Date(
+    entryDate.getFullYear(),
+    entryDate.getMonth(),
+    entryDate.getDate(),
+  );
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const diffDays = Math.round((today.getTime() - entryDay.getTime()) / 86400000);
+  const diffDays = Math.round(
+    (today.getTime() - entryDay.getTime()) / 86400000,
+  );
   if (diffDays === 0) return "";
   if (diffDays === 1) return "Yesterday";
   return `${diffDays}d ago`;

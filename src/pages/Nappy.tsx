@@ -138,7 +138,12 @@ export default function Nappy() {
           {entries.slice(0, 30).map((entry) => {
             const config = typeConfig[entry.type as keyof typeof typeConfig];
             return (
-              <Card key={entry.id} padding="sm" className="cursor-pointer press-effect" onClick={() => setEditingEntry(entry)}>
+              <Card
+                key={entry.id}
+                padding="sm"
+                className="cursor-pointer press-effect"
+                onClick={() => setEditingEntry(entry)}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
@@ -163,7 +168,7 @@ export default function Nappy() {
                   </div>
                   <span className="text-[13px] text-[var(--color-text-secondary)] tabular-nums">
                     {formatRelativeDay(entry.occurred_at) && (
-                      <>{formatRelativeDay(entry.occurred_at)}{" "}</>
+                      <>{formatRelativeDay(entry.occurred_at)} </>
                     )}
                     {formatTime(entry.occurred_at)}
                   </span>
@@ -177,8 +182,14 @@ export default function Nappy() {
         entry={editingEntry}
         isOpen={!!editingEntry}
         onClose={() => setEditingEntry(null)}
-        onSaved={() => { setEditingEntry(null); refresh(); }}
-        onDeleted={() => { setEditingEntry(null); refresh(); }}
+        onSaved={() => {
+          setEditingEntry(null);
+          refresh();
+        }}
+        onDeleted={() => {
+          setEditingEntry(null);
+          refresh();
+        }}
       />
     </PageContainer>
   );
