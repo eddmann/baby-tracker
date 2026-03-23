@@ -6,15 +6,23 @@ I originally used [Jeeves](https://github.com/eddmann/jeeves) (my AI assistant) 
 
 Built so two parents can track everything from their phones with no accounts — just a shared PIN.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" alt="Dashboard" width="250" />
+  <img src="docs/screenshots/feed-timer.png" alt="Feed Timer" width="250" />
+  <img src="docs/screenshots/history.png" alt="History" width="250" />
+</p>
+
 ## Features
 
-- **Sleep** — start/pause/resume/stop timer, duration tracking
-- **Feeds** — breast (timer with left/right side), formula (ml), expressed (ml)
-- **Nappies** — one-tap logging: wet, dirty, or both
-- **Pump** — timer with amount (ml) on stop
-- **Daily Tasks** — recurring to-dos with configurable frequency and start dates
-- **Dashboard** — time-since cards, active timers visible to both users, quick-add sheet
-- **History** — daily timeline, weekly summary stats
+- Sleep — start/pause/resume/stop timer, duration tracking
+- Feeds — breast (timer with left/right side), formula (ml), expressed (ml)
+- Nappies — one-tap logging: wet, dirty, or both
+- Pump — timer with amount (ml) on stop
+- Daily Tasks — recurring to-dos with configurable frequency and start dates
+- Dashboard — time-since cards, active timers visible to both users, quick-add sheet
+- History — daily timeline, weekly summary stats
 
 ## Architecture
 
