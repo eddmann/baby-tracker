@@ -365,9 +365,7 @@ function TimeSinceCard({
   onClick: () => void;
 }) {
   const time = entry
-    ? (entry.ended_at as string) ||
-      (entry.occurred_at as string) ||
-      (entry.started_at as string)
+    ? (entry.started_at as string) || (entry.occurred_at as string)
     : null;
 
   return (

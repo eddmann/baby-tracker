@@ -90,7 +90,7 @@ dashboard.get("/", async (c) => {
   // Calculate hours since last feed
   let hoursSinceLastFeed: number | null = null;
   if (lastFeed) {
-    const lastFeedTime = lastFeed.ended_at || lastFeed.started_at;
+    const lastFeedTime = lastFeed.started_at;
     hoursSinceLastFeed =
       Math.round(
         ((Date.now() - new Date(lastFeedTime).getTime()) / 3600000) * 10,
