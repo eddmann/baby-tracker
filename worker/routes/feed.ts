@@ -158,8 +158,8 @@ feed.put("/:id", zValidator("json", editSchema), async (c) => {
   if (body.amount_ml !== undefined) updates.amount_ml = body.amount_ml;
   if (body.notes !== undefined) updates.notes = body.notes;
 
-  // Recalculate duration if times changed (breast feeds only)
   if (entry.type === "breast") {
+    // Recalculate duration if times changed
     const startedAt = (updates.started_at as string) ?? entry.started_at;
     const endedAt = (updates.ended_at as string) ?? entry.ended_at;
     if (
@@ -173,6 +173,9 @@ feed.put("/:id", zValidator("json", editSchema), async (c) => {
         endedAt,
       );
     }
+  } else if (body.started_at !== undefined) {
+    // Formula/expressed are instant events — keep ended_at in sync
+    updates.ended_at = body.started_at;
   }
 
   await repo.update(id, updates);
