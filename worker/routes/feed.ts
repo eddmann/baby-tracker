@@ -155,10 +155,11 @@ feed.put("/:id", zValidator("json", editSchema), async (c) => {
   const updates: Record<string, unknown> = {
     ...body,
     // For instant feeds, keep ended_at in sync and duration null
-    ...(!isBreast && body.started_at && {
-      ended_at: body.started_at,
-      duration_seconds: null,
-    }),
+    ...(!isBreast &&
+      body.started_at && {
+        ended_at: body.started_at,
+        duration_seconds: null,
+      }),
   };
 
   // Recalculate duration if times changed (breast feeds only)

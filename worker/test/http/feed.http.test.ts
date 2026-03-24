@@ -232,7 +232,13 @@ describe("HTTP /api/feed", () => {
 
     const newTime = "2026-01-01T10:00:00.000Z";
     const { body } = await requestJson<{
-      data: { entry: { started_at: string; ended_at: string; duration_seconds: number | null } };
+      data: {
+        entry: {
+          started_at: string;
+          ended_at: string;
+          duration_seconds: number | null;
+        };
+      };
     }>(env, `/api/feed/${entry.id}`, {
       method: "PUT",
       headers: { Authorization: `Bearer ${token}` },
