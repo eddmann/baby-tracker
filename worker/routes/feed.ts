@@ -158,19 +158,21 @@ feed.put("/:id", zValidator("json", editSchema), async (c) => {
   if (body.amount_ml !== undefined) updates.amount_ml = body.amount_ml;
   if (body.notes !== undefined) updates.notes = body.notes;
 
-  // Recalculate duration if times changed (breast feeds)
-  const startedAt = (updates.started_at as string) ?? entry.started_at;
-  const endedAt = (updates.ended_at as string) ?? entry.ended_at;
-  if (
-    (body.started_at !== undefined || body.ended_at !== undefined) &&
-    endedAt
-  ) {
-    const pauses: Pause[] = JSON.parse(entry.pauses);
-    updates.duration_seconds = calculateElapsedSeconds(
-      startedAt,
-      pauses,
-      endedAt,
-    );
+  // Recalculate duration if times changed (breast feeds only)
+  if (entry.type === "breast") {
+    const startedAt = (updates.started_at as string) ?? entry.started_at;
+    const endedAt = (updates.ended_at as string) ?? entry.ended_at;
+    if (
+      (body.started_at !== undefined || body.ended_at !== undefined) &&
+      endedAt
+    ) {
+      const pauses: Pause[] = JSON.parse(entry.pauses);
+      updates.duration_seconds = calculateElapsedSeconds(
+        startedAt,
+        pauses,
+        endedAt,
+      );
+    }
   }
 
   await repo.update(id, updates);

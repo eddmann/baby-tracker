@@ -316,8 +316,10 @@ export default function Feed() {
                     )}
                   </div>
                   <span className="text-[15px] font-semibold text-[var(--color-accent)] tabular-nums">
-                    {entry.duration_seconds
-                      ? formatDuration(entry.duration_seconds)
+                    {entry.type === "breast"
+                      ? entry.duration_seconds
+                        ? formatDuration(entry.duration_seconds)
+                        : "-"
                       : entry.amount_ml
                         ? `${entry.amount_ml}ml`
                         : "-"}
