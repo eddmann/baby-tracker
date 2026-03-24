@@ -135,6 +135,7 @@ export default function DailyTasks() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => handleToggleComplete(task)}
+                        aria-label={`Complete ${task.name}`}
                         className="text-[var(--color-text-tertiary)] hover:text-[var(--color-accent)] transition-colors shrink-0"
                       >
                         <Circle className="w-6 h-6" />
@@ -173,6 +174,7 @@ export default function DailyTasks() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => handleToggleComplete(task)}
+                        aria-label={`Uncomplete ${task.name}`}
                         className="text-[var(--color-success)] shrink-0"
                       >
                         <CheckCircle2 className="w-6 h-6" />

@@ -143,6 +143,7 @@ export default function History() {
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => changeDate(-1)}
+          aria-label="Previous day"
           className="p-2 rounded-[var(--radius-md)] hover:bg-[var(--color-surface-secondary)] press-effect"
         >
           <ChevronLeft className="w-5 h-5 text-[var(--color-text-secondary)]" />
@@ -159,6 +160,7 @@ export default function History() {
         </div>
         <button
           onClick={() => changeDate(1)}
+          aria-label="Next day"
           disabled={isToday}
           className={cn(
             "p-2 rounded-[var(--radius-md)] hover:bg-[var(--color-surface-secondary)] press-effect",

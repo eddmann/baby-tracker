@@ -76,6 +76,7 @@ export function Modal({
             </h2>
             <button
               onClick={onClose}
+              aria-label="Close"
               className={cn(
                 "w-8 h-8 flex items-center justify-center",
                 "rounded-full",

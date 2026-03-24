@@ -70,7 +70,10 @@ export function PageHeader({
 export function LoadingPage() {
   return (
     <div className="min-h-dvh flex items-center justify-center">
-      <Loader2 className="w-6 h-6 animate-spin text-[var(--color-accent)]" />
+      <Loader2
+        className="w-6 h-6 animate-spin text-[var(--color-accent)]"
+        data-testid="loading-spinner"
+      />
     </div>
   );
 }

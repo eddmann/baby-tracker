@@ -30,8 +30,14 @@ preview: ## Preview production build
 
 ##@ Testing
 
-test: ## Run all tests
+test: ## Run all tests (client + worker)
 	bun run test
+
+test/client: ## Run client tests
+	bun run client:test
+
+test/worker: ## Run worker tests
+	bun run worker:test
 
 test/repositories: ## Run repository tests
 	bun run test:repositories

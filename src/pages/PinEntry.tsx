@@ -46,10 +46,11 @@ export default function PinEntry() {
         </p>
 
         {/* PIN dots */}
-        <div className="flex justify-center gap-4 mb-8">
+        <div className="flex justify-center gap-4 mb-8" data-testid="pin-dots">
           {[0, 1, 2, 3].map((i) => (
             <div
               key={i}
+              data-filled={i < pin.length}
               className={cn(
                 "w-4 h-4 rounded-full transition-all duration-200",
                 i < pin.length
@@ -76,6 +77,7 @@ export default function PinEntry() {
                   <button
                     key="del"
                     onClick={handleDelete}
+                    aria-label="Delete"
                     disabled={isLoading || pin.length === 0}
                     className={cn(
                       "h-16 rounded-[var(--radius-lg)]",

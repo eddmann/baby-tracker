@@ -84,6 +84,7 @@ export function TimerDisplay({
           {status === "active" && onPause && (
             <button
               onClick={onPause}
+              aria-label="Pause"
               className={cn(
                 "flex items-center justify-center",
                 "w-14 h-14 rounded-full",
@@ -98,6 +99,7 @@ export function TimerDisplay({
           {status === "paused" && onResume && (
             <button
               onClick={onResume}
+              aria-label="Resume"
               className={cn(
                 "flex items-center justify-center",
                 "w-14 h-14 rounded-full",
@@ -112,6 +114,7 @@ export function TimerDisplay({
           {onStop && (
             <button
               onClick={onStop}
+              aria-label="Stop"
               className={cn(
                 "flex items-center justify-center",
                 "w-14 h-14 rounded-full",
