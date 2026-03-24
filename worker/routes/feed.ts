@@ -151,26 +151,26 @@ feed.put("/:id", zValidator("json", editSchema), async (c) => {
   if (entry.status !== "completed")
     return c.json({ error: "Can only edit completed entries" }, 400);
 
-  const updates: Record<string, unknown> = {};
-  if (body.started_at !== undefined) updates.started_at = body.started_at;
-  if (body.ended_at !== undefined) updates.ended_at = body.ended_at;
-  if (body.side !== undefined) updates.side = body.side;
-  if (body.amount_ml !== undefined) updates.amount_ml = body.amount_ml;
-  if (body.notes !== undefined) updates.notes = body.notes;
+  const isBreast = entry.type === "breast";
+  const updates: Record<string, unknown> = {
+    ...body,
+    // For instant feeds, keep ended_at in sync and duration null
+    ...(!isBreast && body.started_at && {
+      ended_at: body.started_at,
+      duration_seconds: null,
+    }),
+  };
 
-  // Recalculate duration if times changed (breast feeds)
-  const startedAt = (updates.started_at as string) ?? entry.started_at;
-  const endedAt = (updates.ended_at as string) ?? entry.ended_at;
-  if (
-    (body.started_at !== undefined || body.ended_at !== undefined) &&
-    endedAt
-  ) {
-    const pauses: Pause[] = JSON.parse(entry.pauses);
-    updates.duration_seconds = calculateElapsedSeconds(
-      startedAt,
-      pauses,
-      endedAt,
-    );
+  // Recalculate duration if times changed (breast feeds only)
+  if (isBreast && (body.started_at || body.ended_at)) {
+    const endedAt = (updates.ended_at as string) ?? entry.ended_at;
+    if (endedAt) {
+      updates.duration_seconds = calculateElapsedSeconds(
+        (updates.started_at as string) ?? entry.started_at,
+        JSON.parse(entry.pauses),
+        endedAt,
+      );
+    }
   }
 
   await repo.update(id, updates);

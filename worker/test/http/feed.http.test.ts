@@ -192,6 +192,90 @@ describe("HTTP /api/feed", () => {
     expect(body.data.entry.side).toBe("right");
   });
 
+  test("editing formula feed started_at also updates ended_at", async () => {
+    const env = await createHttpEnv();
+    const token = await authenticateWithPin(env);
+
+    const entry = await insertFeedEntry(env, {
+      type: "formula",
+      amount_ml: 120,
+    });
+
+    const newTime = "2026-01-01T08:00:00.000Z";
+    const { body } = await requestJson<{
+      data: {
+        entry: {
+          started_at: string;
+          ended_at: string;
+          duration_seconds: number | null;
+        };
+      };
+    }>(env, `/api/feed/${entry.id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ started_at: newTime }),
+    });
+
+    expect(body.data.entry.started_at).toBe(newTime);
+    expect(body.data.entry.ended_at).toBe(newTime);
+    expect(body.data.entry.duration_seconds).toBeNull();
+  });
+
+  test("editing expressed feed started_at also updates ended_at", async () => {
+    const env = await createHttpEnv();
+    const token = await authenticateWithPin(env);
+
+    const entry = await insertFeedEntry(env, {
+      type: "expressed",
+      amount_ml: 80,
+    });
+
+    const newTime = "2026-01-01T10:00:00.000Z";
+    const { body } = await requestJson<{
+      data: { entry: { started_at: string; ended_at: string; duration_seconds: number | null } };
+    }>(env, `/api/feed/${entry.id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ started_at: newTime }),
+    });
+
+    expect(body.data.entry.started_at).toBe(newTime);
+    expect(body.data.entry.ended_at).toBe(newTime);
+    expect(body.data.entry.duration_seconds).toBeNull();
+  });
+
+  test("editing breast feed started_at does not sync ended_at", async () => {
+    const env = await createHttpEnv();
+    const token = await authenticateWithPin(env);
+
+    const entry = await insertFeedEntry(env, {
+      type: "breast",
+      side: "left",
+      started_at: "2026-01-01T00:00:00.000Z",
+      ended_at: "2026-01-01T00:20:00.000Z",
+      duration_seconds: 1200,
+    });
+
+    const newStart = "2026-01-01T00:05:00.000Z";
+    const { body } = await requestJson<{
+      data: {
+        entry: {
+          started_at: string;
+          ended_at: string;
+          duration_seconds: number;
+        };
+      };
+    }>(env, `/api/feed/${entry.id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ started_at: newStart }),
+    });
+
+    expect(body.data.entry.started_at).toBe(newStart);
+    expect(body.data.entry.ended_at).toBe("2026-01-01T00:20:00.000Z");
+    expect(body.data.entry.duration_seconds).toBe(900);
+  });
+
   test("deletes a feed entry", async () => {
     const env = await createHttpEnv();
     const token = await authenticateWithPin(env);
