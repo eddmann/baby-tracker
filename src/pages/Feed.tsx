@@ -209,7 +209,7 @@ export default function Feed() {
 
       {/* Tab selector */}
       <div className="flex rounded-[var(--radius-md)] bg-[var(--color-surface-secondary)] p-1 mb-6">
-        {(["breast", "formula", "expressed"] as Tab[]).map((tab) => (
+        {(["breast", "expressed", "formula"] as Tab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
