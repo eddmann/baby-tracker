@@ -26,6 +26,7 @@ export function createFeedEntry(overrides: Partial<FeedEntry> = {}): FeedEntry {
     pauses: overrides.pauses ?? "[]",
     duration_seconds: overrides.duration_seconds ?? 900,
     amount_ml: overrides.amount_ml ?? null,
+    is_tracked: overrides.is_tracked ?? true,
     notes: overrides.notes ?? null,
     created_at: overrides.created_at ?? DEFAULT_NOW,
     updated_at: overrides.updated_at ?? DEFAULT_NOW,

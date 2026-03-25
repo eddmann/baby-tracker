@@ -109,7 +109,11 @@ export default function Dashboard() {
     <PageContainer>
       <PageHeader
         title={getGreeting()}
-        subtitle={new Date().toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
+        subtitle={new Date().toLocaleDateString(undefined, {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+        })}
         action={
           <Link
             to="/history"

@@ -145,6 +145,7 @@ interface EditFeedModalProps {
     started_at: string;
     ended_at: string | null;
     amount_ml: number | null;
+    is_tracked: boolean;
     notes: string | null;
   } | null;
   isOpen: boolean;
@@ -165,6 +166,7 @@ export function EditFeedModal({
   const [side, setSide] = useState<"left" | "right">("left");
   const [amountMl, setAmountMl] = useState("");
   const [notes, setNotes] = useState("");
+  const [isTracked, setIsTracked] = useState(true);
   const [saving, setSaving] = useState(false);
   const { showToast } = useToast();
 
@@ -174,6 +176,7 @@ export function EditFeedModal({
       setEndedAt(entry.ended_at ? toDatetimeLocal(entry.ended_at) : "");
       setSide((entry.side as "left" | "right") ?? "left");
       setAmountMl(entry.amount_ml ? String(entry.amount_ml) : "");
+      setIsTracked(entry.is_tracked);
       setNotes(entry.notes ?? "");
     }
   }, [entry]);
@@ -185,6 +188,7 @@ export function EditFeedModal({
     setSaving(true);
     const fields: Parameters<typeof api.updateFeed>[1] = {
       started_at: fromDatetimeLocal(startedAt),
+      is_tracked: isTracked,
       notes: notes || null,
     };
     if (isBreast) {
@@ -263,6 +267,30 @@ export function EditFeedModal({
             placeholder="e.g. 120"
           />
         )}
+        <div className="flex items-center justify-between">
+          <label className="text-[13px] font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+            Tracked feed
+          </label>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isTracked}
+            onClick={() => setIsTracked(!isTracked)}
+            className={cn(
+              "relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-200",
+              isTracked
+                ? "bg-[var(--color-accent)]"
+                : "bg-[var(--color-surface-secondary)]",
+            )}
+          >
+            <span
+              className={cn(
+                "inline-block h-5 w-5 rounded-full bg-white shadow transition-transform duration-200",
+                isTracked ? "translate-x-6" : "translate-x-1",
+              )}
+            />
+          </button>
+        </div>
         <Input
           label="Notes"
           value={notes}

@@ -33,6 +33,7 @@ interface FeedEntry {
   pauses: string;
   duration_seconds: number | null;
   amount_ml: number | null;
+  is_tracked: boolean;
   notes: string | null;
 }
 
@@ -315,7 +316,14 @@ export default function Feed() {
                       </p>
                     )}
                   </div>
-                  <span className="text-[15px] font-semibold text-[var(--color-accent)] tabular-nums">
+                  <span
+                    className={cn(
+                      "text-[15px] font-semibold tabular-nums",
+                      entry.is_tracked
+                        ? "text-[var(--color-accent)]"
+                        : "text-[var(--color-text-tertiary)]",
+                    )}
+                  >
                     {entry.duration_seconds
                       ? formatDuration(entry.duration_seconds)
                       : entry.amount_ml

@@ -43,6 +43,7 @@ export interface FeedEntry {
   pauses: string;
   duration_seconds: number | null;
   amount_ml: number | null;
+  is_tracked: boolean;
   notes: string | null;
   created_at: string;
   updated_at: string;

@@ -84,7 +84,7 @@ describe("App Route Guards", () => {
         isLoading: false,
       });
 
-      expect(await screen.findByText(/last feed/i)).toBeInTheDocument();
+      expect(await screen.findByText(/feeds/i)).toBeInTheDocument();
     });
 
     test("redirects to pin when token is invalid", async () => {

@@ -212,6 +212,7 @@ export async function updateFeed(
     ended_at?: string;
     side?: string;
     amount_ml?: number;
+    is_tracked?: boolean;
     notes?: string | null;
   },
 ): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {

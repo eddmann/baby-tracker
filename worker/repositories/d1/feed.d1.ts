@@ -75,6 +75,10 @@ export function createD1FeedRepository(env: Env): FeedRepository {
         fields.push("amount_ml = ?");
         values.push(updates.amount_ml);
       }
+      if (updates.is_tracked !== undefined) {
+        fields.push("is_tracked = ?");
+        values.push(updates.is_tracked ? 1 : 0);
+      }
       if (updates.notes !== undefined) {
         fields.push("notes = ?");
         values.push(updates.notes);
@@ -108,7 +112,7 @@ export function createD1FeedRepository(env: Env): FeedRepository {
 
     async countByDate(start: string, end: string): Promise<number> {
       const row = await env.DB.prepare(
-        "SELECT COUNT(*) as count FROM feed_entries WHERE started_at >= ? AND started_at < ? AND status = 'completed'",
+        "SELECT COUNT(*) as count FROM feed_entries WHERE started_at >= ? AND started_at < ? AND status = 'completed' AND is_tracked = 1",
       )
         .bind(start, end)
         .first<{ count: number }>();

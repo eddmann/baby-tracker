@@ -1,0 +1,1 @@
+ALTER TABLE feed_entries ADD COLUMN is_tracked INTEGER NOT NULL DEFAULT 1;

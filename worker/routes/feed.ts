@@ -138,6 +138,7 @@ const editSchema = z.object({
   ended_at: z.string().datetime().optional(),
   side: z.enum(["left", "right"]).optional(),
   amount_ml: z.number().positive().optional(),
+  is_tracked: z.boolean().optional(),
   notes: z.string().nullable().optional(),
 });
 
