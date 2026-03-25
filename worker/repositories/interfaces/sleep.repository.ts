@@ -8,5 +8,6 @@ export interface SleepRepository {
   listRecent(limit: number): Promise<SleepEntry[]>;
   getLatestCompleted(): Promise<SleepEntry | null>;
   listByDate(start: string, end: string): Promise<SleepEntry[]>;
+  countByDate(start: string, end: string): Promise<number>;
   delete(id: number): Promise<void>;
 }

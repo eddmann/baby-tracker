@@ -93,6 +93,15 @@ export function createD1SleepRepository(env: Env): SleepRepository {
       return results;
     },
 
+    async countByDate(start: string, end: string): Promise<number> {
+      const row = await env.DB.prepare(
+        "SELECT COUNT(*) as count FROM sleep_entries WHERE started_at >= ? AND started_at < ? AND status = 'completed'",
+      )
+        .bind(start, end)
+        .first<{ count: number }>();
+      return row?.count ?? 0;
+    },
+
     async delete(id: number): Promise<void> {
       await env.DB.prepare("DELETE FROM sleep_entries WHERE id = ?")
         .bind(id)

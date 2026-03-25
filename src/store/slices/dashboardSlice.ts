@@ -10,6 +10,7 @@ interface TodayStats {
   nappy_count: number;
   nappy_target: number;
   feed_count: number;
+  sleep_count: number;
   hours_since_last_feed: number | null;
   feed_interval_target: number;
 }

@@ -28,6 +28,11 @@ describe("HTTP /api/dashboard", () => {
         last_feed: null;
         last_nappy: null;
         last_pump: null;
+        today: {
+          nappy_count: number;
+          feed_count: number;
+          sleep_count: number;
+        };
       };
     }>(env, "/api/dashboard", {
       headers: { Authorization: `Bearer ${token}` },
@@ -39,6 +44,9 @@ describe("HTTP /api/dashboard", () => {
     expect(body.data.last_feed).toBeNull();
     expect(body.data.last_nappy).toBeNull();
     expect(body.data.last_pump).toBeNull();
+    expect(body.data.today.feed_count).toBe(0);
+    expect(body.data.today.sleep_count).toBe(0);
+    expect(body.data.today.nappy_count).toBe(0);
   });
 
   test("returns last entries of each type", async () => {

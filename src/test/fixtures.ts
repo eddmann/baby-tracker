@@ -85,6 +85,7 @@ interface DashboardData {
     nappy_count: number;
     nappy_target: number;
     feed_count: number;
+    sleep_count: number;
     hours_since_last_feed: number | null;
     feed_interval_target: number;
   };
@@ -183,6 +184,7 @@ export function createDashboardData(
       nappy_count: 4,
       nappy_target: 6,
       feed_count: 3,
+      sleep_count: 2,
       hours_since_last_feed: 1.5,
       feed_interval_target: 3,
     },

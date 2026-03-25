@@ -33,6 +33,7 @@ dashboard.get("/", async (c) => {
     lastPump,
     todayNappyCount,
     todayFeedCount,
+    todaySleepCount,
     allTasks,
     todayTaskCompletions,
   ] = await Promise.all([
@@ -45,6 +46,7 @@ dashboard.get("/", async (c) => {
     pumpRepo.getLatestCompleted(),
     nappyRepo.countByDate(start, end),
     feedRepo.countByDate(start, end),
+    sleepRepo.countByDate(start, end),
     dailyTaskRepo.listAll(),
     dailyTaskRepo.getCompletionsForDateRange(start, end),
   ]);
@@ -108,6 +110,7 @@ dashboard.get("/", async (c) => {
         nappy_count: todayNappyCount,
         nappy_target: 12,
         feed_count: todayFeedCount,
+        sleep_count: todaySleepCount,
         hours_since_last_feed: hoursSinceLastFeed,
         feed_interval_target: 4,
       },

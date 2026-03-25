@@ -109,7 +109,7 @@ export default function Dashboard() {
     <PageContainer>
       <PageHeader
         title={getGreeting()}
-        subtitle="Baby Tracker"
+        subtitle={new Date().toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}
         action={
           <Link
             to="/history"
@@ -155,129 +155,122 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Today's Stats */}
-      {today && (
-        <div className="grid grid-cols-2 gap-3 mb-6 animate-fade-in">
-          <Card padding="sm">
-            <div className="flex flex-col items-center text-center py-1">
-              <p className="text-[13px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wide">
-                Nappies today
-              </p>
-              <p
-                className={cn(
-                  "text-[28px] font-bold tabular-nums mt-1",
-                  today.nappy_count >= today.nappy_target
-                    ? "text-[var(--color-success)]"
-                    : today.nappy_count >= today.nappy_target * 0.5
-                      ? "text-[var(--color-warning)]"
-                      : "text-[var(--color-danger)]",
-                )}
-              >
-                {today.nappy_count}
-                <span className="text-[15px] font-normal text-[var(--color-text-tertiary)]">
-                  /{today.nappy_target}
-                </span>
-              </p>
-            </div>
-          </Card>
-          <Card padding="sm">
-            <div className="flex flex-col items-center text-center py-1">
-              <p className="text-[13px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wide">
-                Since last feed
-              </p>
-              {today.hours_since_last_feed !== null ? (
-                <p
-                  className={cn(
-                    "text-[28px] font-bold tabular-nums mt-1",
-                    today.hours_since_last_feed <= today.feed_interval_target
-                      ? "text-[var(--color-success)]"
-                      : today.hours_since_last_feed <=
-                          today.feed_interval_target * 1.5
-                        ? "text-[var(--color-warning)]"
-                        : "text-[var(--color-danger)]",
-                  )}
-                >
-                  {today.hours_since_last_feed < 1
-                    ? `${Math.round(today.hours_since_last_feed * 60)}m`
-                    : `${Math.floor(today.hours_since_last_feed)}h ${Math.round((today.hours_since_last_feed % 1) * 60)}m`}
-                </p>
-              ) : (
-                <p className="text-[28px] font-bold text-[var(--color-text-tertiary)] mt-1">
-                  --
-                </p>
-              )}
-              <p className="text-[11px] text-[var(--color-text-tertiary)]">
-                target: every {today.feed_interval_target}h
-              </p>
-            </div>
-          </Card>
-        </div>
-      )}
-
-      {/* Daily Tasks */}
-      {dailyTasks && dailyTasks.total_count > 0 && (
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 gap-3 animate-fade-in">
         <Card
-          className="mb-6 cursor-pointer press-effect hover:shadow-[var(--shadow-md)] transition-shadow animate-fade-in"
-          onClick={() => navigate("/daily-tasks")}
+          padding="sm"
+          className="cursor-pointer press-effect"
+          onClick={() => navigate("/feed")}
         >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
-              <ListChecks className="w-5 h-5" />
-            </div>
-            <div className="flex-1">
-              <p className="text-[15px] font-semibold text-[var(--color-text-primary)]">
-                Daily Tasks
+          <div className="flex flex-col items-center text-center py-1">
+            <div className="flex items-center gap-1 mb-1">
+              <Baby className="w-4 h-4 text-[var(--color-accent)]" />
+              <p className="text-[11px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wide">
+                Feeds
               </p>
-              <p className="text-[13px] text-[var(--color-text-secondary)]">
-                {dailyTasks.completed_count} of {dailyTasks.due_count} due tasks
-                done
+            </div>
+            <p className="text-[28px] font-bold tabular-nums mt-1 text-[var(--color-accent)]">
+              {today?.feed_count ?? 0}
+            </p>
+            <p className="text-[11px] text-[var(--color-text-tertiary)]">
+              {lastFeed
+                ? `last ${formatTimeSince(lastFeed.started_at as string)}`
+                : "none yet"}
+            </p>
+          </div>
+        </Card>
+        <Card
+          padding="sm"
+          className="cursor-pointer press-effect"
+          onClick={() => navigate("/sleep")}
+        >
+          <div className="flex flex-col items-center text-center py-1">
+            <div className="flex items-center gap-1 mb-1">
+              <Moon className="w-4 h-4 text-[var(--color-purple)]" />
+              <p className="text-[11px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wide">
+                Sleeps
+              </p>
+            </div>
+            <p className="text-[28px] font-bold tabular-nums mt-1 text-[var(--color-purple)]">
+              {today?.sleep_count ?? 0}
+            </p>
+            <p className="text-[11px] text-[var(--color-text-tertiary)]">
+              {lastSleep
+                ? `last ${formatTimeSince(lastSleep.started_at as string)}`
+                : "none yet"}
+            </p>
+          </div>
+        </Card>
+        <Card
+          padding="sm"
+          className="cursor-pointer press-effect"
+          onClick={() => navigate("/nappy")}
+        >
+          <div className="flex flex-col items-center text-center py-1">
+            <div className="flex items-center gap-1 mb-1">
+              <CloudRain className="w-4 h-4 text-[var(--color-success)]" />
+              <p className="text-[11px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wide">
+                Nappies
               </p>
             </div>
             <p
               className={cn(
-                "text-[22px] font-bold tabular-nums",
-                dailyTasks.completed_count >= dailyTasks.due_count &&
-                  dailyTasks.due_count > 0
+                "text-[28px] font-bold tabular-nums mt-1",
+                today && today.nappy_count >= today.nappy_target
                   ? "text-[var(--color-success)]"
-                  : dailyTasks.completed_count > 0
+                  : today && today.nappy_count >= today.nappy_target * 0.5
                     ? "text-[var(--color-warning)]"
-                    : dailyTasks.due_count > 0
-                      ? "text-[var(--color-danger)]"
-                      : "text-[var(--color-success)]",
+                    : "text-[var(--color-danger)]",
               )}
             >
-              {dailyTasks.completed_count}/{dailyTasks.due_count}
+              {today?.nappy_count ?? 0}
+              <span className="text-[13px] font-normal text-[var(--color-text-tertiary)]">
+                /{today?.nappy_target ?? 12}
+              </span>
+            </p>
+            <p className="text-[11px] text-[var(--color-text-tertiary)]">
+              {lastNappy
+                ? `last ${formatTimeSince(lastNappy.occurred_at as string)}`
+                : "none yet"}
             </p>
           </div>
         </Card>
-      )}
-
-      {/* Time Since Cards */}
-      <div className="space-y-3 animate-fade-in">
-        <TimeSinceCard
-          icon={<Baby className="w-5 h-5" />}
-          label="Last Feed"
-          entry={lastFeed}
-          color="text-[var(--color-accent)]"
-          bgColor="bg-[var(--color-accent)]/10"
-          onClick={() => navigate("/feed")}
-        />
-        <TimeSinceCard
-          icon={<Moon className="w-5 h-5" />}
-          label="Last Sleep"
-          entry={lastSleep}
-          color="text-[var(--color-purple)]"
-          bgColor="bg-[var(--color-purple)]/10"
-          onClick={() => navigate("/sleep")}
-        />
-        <TimeSinceCard
-          icon={<CloudRain className="w-5 h-5" />}
-          label="Last Nappy"
-          entry={lastNappy}
-          color="text-[var(--color-success)]"
-          bgColor="bg-[var(--color-success)]/10"
-          onClick={() => navigate("/nappy")}
-        />
+        <Card
+          padding="sm"
+          className="cursor-pointer press-effect"
+          onClick={() => navigate("/daily-tasks")}
+        >
+          <div className="flex flex-col items-center text-center py-1">
+            <div className="flex items-center gap-1 mb-1">
+              <ListChecks className="w-4 h-4 text-[var(--color-accent)]" />
+              <p className="text-[11px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wide">
+                Tasks
+              </p>
+            </div>
+            <p
+              className={cn(
+                "text-[28px] font-bold tabular-nums mt-1",
+                dailyTasks &&
+                  dailyTasks.completed_count >= dailyTasks.due_count &&
+                  dailyTasks.due_count > 0
+                  ? "text-[var(--color-success)]"
+                  : dailyTasks && dailyTasks.completed_count > 0
+                    ? "text-[var(--color-warning)]"
+                    : dailyTasks && dailyTasks.due_count > 0
+                      ? "text-[var(--color-danger)]"
+                      : "text-[var(--color-text-tertiary)]",
+              )}
+            >
+              {dailyTasks?.completed_count ?? 0}
+              <span className="text-[13px] font-normal text-[var(--color-text-tertiary)]">
+                /{dailyTasks?.due_count ?? 0}
+              </span>
+            </p>
+            <p className="text-[11px] text-[var(--color-text-tertiary)]">
+              due today
+            </p>
+          </div>
+        </Card>
       </div>
 
       <FloatingActionButton onClick={() => setShowQuickAdd(true)} label="Log" />
@@ -346,53 +339,6 @@ export default function Dashboard() {
         </div>
       </Modal>
     </PageContainer>
-  );
-}
-
-function TimeSinceCard({
-  icon,
-  label,
-  entry,
-  color,
-  bgColor,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  entry: Record<string, unknown> | null;
-  color: string;
-  bgColor: string;
-  onClick: () => void;
-}) {
-  const time = entry
-    ? (entry.started_at as string) || (entry.occurred_at as string)
-    : null;
-
-  return (
-    <Card
-      className="cursor-pointer press-effect hover:shadow-[var(--shadow-md)] transition-shadow"
-      onClick={onClick}
-    >
-      <div className="flex items-center gap-3">
-        <div
-          className={cn(
-            "w-10 h-10 rounded-full flex items-center justify-center",
-            bgColor,
-            color,
-          )}
-        >
-          {icon}
-        </div>
-        <div className="flex-1">
-          <p className="text-[15px] font-semibold text-[var(--color-text-primary)]">
-            {label}
-          </p>
-          <p className="text-[13px] text-[var(--color-text-secondary)]">
-            {time ? formatTimeSince(time) : "No entries yet"}
-          </p>
-        </div>
-      </div>
-    </Card>
   );
 }
 

@@ -19,12 +19,28 @@ function setupDashboardHandlers(
 }
 
 describe("Dashboard", () => {
-  test("loads dashboard data and shows today's stats", async () => {
+  test("loads dashboard data and shows today's counts", async () => {
     setupDashboardHandlers();
     renderAppAsAuthenticated(<Dashboard />);
 
-    expect(await screen.findByText(/nappies today/i)).toBeInTheDocument();
-    expect(screen.getByText(/since last feed/i)).toBeInTheDocument();
+    expect(await screen.findByText(/feeds/i)).toBeInTheDocument();
+    expect(screen.getByText(/sleeps/i)).toBeInTheDocument();
+    expect(screen.getByText(/nappies/i)).toBeInTheDocument();
+    expect(screen.getByText(/tasks/i)).toBeInTheDocument();
+
+    // Verify counts from fixture data (feed_count: 3, sleep_count: 2, nappy_count: 4)
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("4")).toBeInTheDocument();
+  });
+
+  test("shows 'last X ago' when entries exist", async () => {
+    setupDashboardHandlers();
+    renderAppAsAuthenticated(<Dashboard />);
+
+    await screen.findByText(/feeds/i);
+    const lastTexts = screen.getAllByText(/^last .+ ago$/);
+    expect(lastTexts.length).toBe(3);
   });
 
   test("shows active timer with pause/stop controls", async () => {
@@ -46,16 +62,7 @@ describe("Dashboard", () => {
     expect(await screen.findByText(/sleep/i)).toBeInTheDocument();
   });
 
-  test("shows time-since cards for last feed, sleep, nappy", async () => {
-    setupDashboardHandlers();
-    renderAppAsAuthenticated(<Dashboard />);
-
-    expect(await screen.findByText("Last Feed")).toBeInTheDocument();
-    expect(screen.getByText("Last Sleep")).toBeInTheDocument();
-    expect(screen.getByText("Last Nappy")).toBeInTheDocument();
-  });
-
-  test("shows 'No entries yet' when no last entries", async () => {
+  test("shows 'none yet' when no last entries", async () => {
     setupDashboardHandlers({
       last_sleep: null,
       last_feed: null,
@@ -64,9 +71,9 @@ describe("Dashboard", () => {
     });
     renderAppAsAuthenticated(<Dashboard />);
 
-    expect(await screen.findByText("Last Feed")).toBeInTheDocument();
-    const noEntries = screen.getAllByText("No entries yet");
-    expect(noEntries.length).toBe(3);
+    expect(await screen.findByText(/feeds/i)).toBeInTheDocument();
+    const noneYet = screen.getAllByText("none yet");
+    expect(noneYet.length).toBe(3);
   });
 
   test("opens quick-add modal and logs a wet nappy", async () => {
@@ -91,7 +98,7 @@ describe("Dashboard", () => {
     expect(await screen.findByText(/sleep timer started/i)).toBeInTheDocument();
   });
 
-  test("shows daily tasks summary card and navigates on click", async () => {
+  test("shows daily tasks in stats grid", async () => {
     setupDashboardHandlers({
       daily_tasks: {
         total_count: 3,
@@ -101,18 +108,8 @@ describe("Dashboard", () => {
     });
     renderAppAsAuthenticated(<Dashboard />);
 
-    expect(await screen.findByText("Daily Tasks")).toBeInTheDocument();
-    expect(screen.getByText(/1 of 2 due tasks done/i)).toBeInTheDocument();
-  });
-
-  test("hides daily tasks card when no tasks exist", async () => {
-    setupDashboardHandlers({
-      daily_tasks: null,
-    });
-    renderAppAsAuthenticated(<Dashboard />);
-
-    expect(await screen.findByText("Last Feed")).toBeInTheDocument();
-    expect(screen.queryByText("Daily Tasks")).not.toBeInTheDocument();
+    expect(await screen.findByText(/tasks/i)).toBeInTheDocument();
+    expect(screen.getByText("due today")).toBeInTheDocument();
   });
 
   test("shows error toast when quick-add nappy fails", async () => {
