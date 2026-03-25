@@ -149,11 +149,7 @@ export default function Feed() {
   const FEED_INTERVAL_TARGET = 4;
   const lastCompleted = todayFeeds[0];
   const hoursSinceLast = lastCompleted
-    ? (Date.now() -
-        new Date(
-          lastCompleted.ended_at || lastCompleted.started_at,
-        ).getTime()) /
-      3600000
+    ? (Date.now() - new Date(lastCompleted.started_at).getTime()) / 3600000
     : null;
 
   const filteredEntries = entries.filter((e) => {
@@ -187,7 +183,7 @@ export default function Feed() {
             )}
           >
             {hoursSinceLast !== null
-              ? `Last: ${formatTimeSince(lastCompleted.ended_at || lastCompleted.started_at)}`
+              ? `Last: ${formatTimeSince(lastCompleted.started_at)}`
               : "No feeds yet"}
           </p>
         </div>
