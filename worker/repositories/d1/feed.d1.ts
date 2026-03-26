@@ -1,6 +1,11 @@
 import type { Env, FeedEntry, FeedType, BreastSide } from "../../types";
 import type { FeedRepository } from "../interfaces/feed.repository";
 
+function normalizeRow<T extends FeedEntry | null>(row: T): T {
+  if (!row) return row;
+  return { ...row, is_tracked: Boolean(row.is_tracked) };
+}
+
 export function createD1FeedRepository(env: Env): FeedRepository {
   return {
     async createBreast(side: BreastSide): Promise<FeedEntry> {
@@ -10,7 +15,7 @@ export function createD1FeedRepository(env: Env): FeedRepository {
       )
         .bind(side, now, now, now)
         .first<FeedEntry>();
-      return row!;
+      return normalizeRow(row!);
     },
 
     async createInstant(
@@ -24,7 +29,7 @@ export function createD1FeedRepository(env: Env): FeedRepository {
       )
         .bind(type, amountMl, notes ?? null, now, now, now, now)
         .first<FeedEntry>();
-      return row!;
+      return normalizeRow(row!);
     },
 
     async getById(id: number): Promise<FeedEntry | null> {
@@ -33,14 +38,14 @@ export function createD1FeedRepository(env: Env): FeedRepository {
       )
         .bind(id)
         .first<FeedEntry>();
-      return row ?? null;
+      return normalizeRow(row ?? null);
     },
 
     async getActive(): Promise<FeedEntry | null> {
       const row = await env.DB.prepare(
         "SELECT * FROM feed_entries WHERE status IN ('active', 'paused') ORDER BY started_at DESC LIMIT 1",
       ).first<FeedEntry>();
-      return row ?? null;
+      return normalizeRow(row ?? null);
     },
 
     async update(id: number, updates: Partial<FeedEntry>): Promise<void> {
@@ -100,14 +105,14 @@ export function createD1FeedRepository(env: Env): FeedRepository {
       )
         .bind(limit)
         .all<FeedEntry>();
-      return results;
+      return results.map(normalizeRow);
     },
 
     async getLatestCompleted(): Promise<FeedEntry | null> {
       const row = await env.DB.prepare(
         "SELECT * FROM feed_entries WHERE status = 'completed' ORDER BY COALESCE(ended_at, started_at) DESC LIMIT 1",
       ).first<FeedEntry>();
-      return row ?? null;
+      return normalizeRow(row ?? null);
     },
 
     async countByDate(start: string, end: string): Promise<number> {
@@ -125,7 +130,7 @@ export function createD1FeedRepository(env: Env): FeedRepository {
       )
         .bind(start, end)
         .all<FeedEntry>();
-      return results;
+      return results.map(normalizeRow);
     },
 
     async delete(id: number): Promise<void> {

@@ -282,6 +282,34 @@ describe("HTTP /api/feed", () => {
     expect(body.data.entry.duration_seconds).toBe(900);
   });
 
+  test("editing a formula feed with is_tracked preserves tracked status", async () => {
+    const env = await createHttpEnv();
+    const token = await authenticateWithPin(env);
+
+    // Create a formula feed (is_tracked defaults to true in the DB)
+    const create = await requestJson<{
+      data: { entry: { id: number; is_tracked: boolean } };
+    }>(env, "/api/feed/formula", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ amount_ml: 120 }),
+    });
+
+    const entry = create.body.data.entry;
+
+    const { res, body } = await requestJson<{
+      data: { entry: { amount_ml: number; is_tracked: boolean } };
+    }>(env, `/api/feed/${entry.id}`, {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ amount_ml: 150, is_tracked: entry.is_tracked }),
+    });
+
+    expect(res.status).toBe(200);
+    expect(body.data.entry.amount_ml).toBe(150);
+    expect(body.data.entry.is_tracked).toBe(true);
+  });
+
   test("deletes a feed entry", async () => {
     const env = await createHttpEnv();
     const token = await authenticateWithPin(env);
