@@ -1,6 +1,6 @@
 # Baby Tracker
 
-A shared baby tracking PWA for logging sleep, feeds, nappies, and pumping sessions.
+A shared baby tracking PWA for logging sleep, feeds, nappies, pumping sessions, and growth measurements.
 
 I originally used [Jeeves](https://github.com/eddmann/jeeves) (my AI assistant) to help manage baby tracking through conversational commands. It worked well, but I wanted something with a dedicated UI that I could share with my wife and iterate on independently from the assistant itself.
 
@@ -20,6 +20,7 @@ Built so two parents can track everything from their phones with no accounts —
 - Feeds — breast (timer with left/right side), formula (ml), expressed (ml)
 - Nappies — one-tap logging: wet, dirty, or both
 - Pump — timer with amount (ml) on stop
+- Growth — weight (kg/lbs) and height (cm/in) tracking
 - Daily Tasks — recurring to-dos with configurable frequency and start dates
 - Dashboard — time-since cards, active timers visible to both users, quick-add sheet
 - History — daily timeline, weekly summary stats

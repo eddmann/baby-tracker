@@ -11,7 +11,8 @@ import { Button } from "../components/ui/Button";
 import { useToast } from "../components/ui/Toast";
 import { formatFrequency } from "../lib/utils";
 import * as api from "../lib/api";
-import { ListChecks, Plus, Circle, CheckCircle2 } from "lucide-react";
+import { ListChecks, Circle, CheckCircle2 } from "lucide-react";
+import { FloatingActionButton } from "../components/ui/TabBar";
 
 interface TaskWithStatus {
   id: number;
@@ -101,19 +102,7 @@ export default function DailyTasks() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title="Daily Tasks"
-        subtitle="Recurring to-dos"
-        action={
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1.5 text-[var(--color-accent)] text-[14px] font-medium press-effect"
-          >
-            <Plus className="w-4 h-4" />
-            Add
-          </button>
-        }
-      />
+      <PageHeader title="Daily Tasks" subtitle="Recurring to-dos" />
 
       {tasks.length === 0 && !isLoading ? (
         <EmptyState
@@ -234,6 +223,8 @@ export default function DailyTasks() {
           )}
         </>
       )}
+
+      <FloatingActionButton onClick={() => setShowAddModal(true)} label="Add" />
 
       {/* Add Modal */}
       <AddTaskModal

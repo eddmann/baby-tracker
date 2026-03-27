@@ -6,6 +6,7 @@ import {
   createNappyEntry,
   createPumpEntry,
   createDailyTask,
+  createGrowthEntry,
 } from "../fixtures";
 import { TEST_BASE_URL } from "../global-setup";
 
@@ -270,6 +271,33 @@ export const handlers = [
   }),
 
   http.delete(`${BASE_URL}/api/daily-tasks/:id/complete`, () => {
+    return HttpResponse.json({ data: { success: true } });
+  }),
+
+  // Growth
+  http.get(`${BASE_URL}/api/growth`, () => {
+    return HttpResponse.json({
+      data: { entries: [createGrowthEntry()] },
+    });
+  }),
+
+  http.post(`${BASE_URL}/api/growth`, async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>;
+    const entry = createGrowthEntry(
+      body as Partial<ReturnType<typeof createGrowthEntry>>,
+    );
+    return HttpResponse.json({ data: { entry } });
+  }),
+
+  http.put(`${BASE_URL}/api/growth/:id`, async ({ request }) => {
+    const body = (await request.json()) as Record<string, unknown>;
+    const entry = createGrowthEntry(
+      body as Partial<ReturnType<typeof createGrowthEntry>>,
+    );
+    return HttpResponse.json({ data: { entry } });
+  }),
+
+  http.delete(`${BASE_URL}/api/growth/:id`, () => {
     return HttpResponse.json({ data: { success: true } });
   }),
 

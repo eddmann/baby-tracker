@@ -59,6 +59,15 @@ export interface NappyEntry {
   created_at: string;
 }
 
+export interface GrowthEntry {
+  id: number;
+  weight_grams: number | null;
+  height_mm: number | null;
+  measured_at: string;
+  notes: string | null;
+  created_at: string;
+}
+
 export interface PumpEntry {
   id: number;
   status: TimerStatus;

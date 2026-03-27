@@ -53,6 +53,7 @@ export async function clearD1Tables(env: Env): Promise<void> {
   const tables = [
     "daily_task_completions",
     "daily_tasks",
+    "growth_entries",
     "pump_entries",
     "nappy_entries",
     "feed_entries",

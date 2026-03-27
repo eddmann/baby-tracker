@@ -9,6 +9,7 @@ import Nappy from "./pages/Nappy";
 import Pump from "./pages/Pump";
 import History from "./pages/History";
 import DailyTasks from "./pages/DailyTasks";
+import Growth from "./pages/Growth";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/pump" element={<Pump />} />
                 <Route path="/history" element={<History />} />
                 <Route path="/daily-tasks" element={<DailyTasks />} />
+                <Route path="/growth" element={<Growth />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </AppShell>

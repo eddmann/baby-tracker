@@ -6,6 +6,22 @@ import { useToast } from "./ui/Toast";
 import { cn } from "../lib/utils";
 import * as api from "../lib/api";
 
+function gramsToKg(g: number): string {
+  return (g / 1000).toFixed(2);
+}
+
+function gramsToLbs(g: number): string {
+  return (g / 453.592).toFixed(1);
+}
+
+function mmToCm(mm: number): string {
+  return (mm / 10).toFixed(1);
+}
+
+function mmToInches(mm: number): string {
+  return (mm / 25.4).toFixed(1);
+}
+
 // Helper to convert ISO string to datetime-local format
 function toDatetimeLocal(iso: string): string {
   const d = new Date(iso);
@@ -524,6 +540,133 @@ export function EditPumpModal({
           value={amountMl}
           onChange={(e) => setAmountMl(e.target.value)}
           placeholder="e.g. 60"
+        />
+        <Input
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Any notes..."
+        />
+        <Button size="lg" fullWidth onClick={handleSave} isLoading={saving}>
+          Save
+        </Button>
+        <DeleteButton onDelete={handleDelete} />
+      </div>
+    </Modal>
+  );
+}
+
+// ─── Growth ─────────────────────────────────────────────
+
+interface EditGrowthModalProps {
+  entry: {
+    id: number;
+    weight_grams: number | null;
+    height_mm: number | null;
+    measured_at: string;
+    notes: string | null;
+  } | null;
+  isOpen: boolean;
+  onClose: () => void;
+  onSaved: () => void;
+  onDeleted: () => void;
+}
+
+export function EditGrowthModal({
+  entry,
+  isOpen,
+  onClose,
+  onSaved,
+  onDeleted,
+}: EditGrowthModalProps) {
+  const [weightKg, setWeightKg] = useState("");
+  const [heightCm, setHeightCm] = useState("");
+  const [measuredAt, setMeasuredAt] = useState("");
+  const [notes, setNotes] = useState("");
+  const [saving, setSaving] = useState(false);
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (entry) {
+      setWeightKg(entry.weight_grams ? gramsToKg(entry.weight_grams) : "");
+      setHeightCm(entry.height_mm ? mmToCm(entry.height_mm) : "");
+      setMeasuredAt(toDatetimeLocal(entry.measured_at));
+      setNotes(entry.notes ?? "");
+    }
+  }, [entry]);
+
+  const handleSave = async () => {
+    if (!entry) return;
+    setSaving(true);
+    const weightGrams = weightKg
+      ? Math.round(parseFloat(weightKg) * 1000)
+      : null;
+    const heightMm = heightCm ? Math.round(parseFloat(heightCm) * 10) : null;
+
+    if (!weightGrams && !heightMm) {
+      showToast("error", "Enter at least weight or height");
+      setSaving(false);
+      return;
+    }
+
+    const res = await api.updateGrowth(entry.id, {
+      weight_grams: weightGrams,
+      height_mm: heightMm,
+      measured_at: fromDatetimeLocal(measuredAt),
+      notes: notes || null,
+    });
+    setSaving(false);
+    if (res.error) showToast("error", res.error);
+    else {
+      showToast("success", "Growth entry updated");
+      onSaved();
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!entry) return;
+    const res = await api.deleteGrowth(entry.id);
+    if (res.error) showToast("error", res.error);
+    else {
+      showToast("success", "Growth entry deleted");
+      onDeleted();
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Edit Growth">
+      <div className="space-y-4">
+        <Input
+          label="Weight (kg)"
+          type="number"
+          inputMode="decimal"
+          value={weightKg}
+          onChange={(e) => setWeightKg(e.target.value)}
+          placeholder="e.g. 4.30"
+          hint={
+            weightKg
+              ? `${gramsToLbs(Math.round(parseFloat(weightKg) * 1000))} lbs`
+              : undefined
+          }
+        />
+        <Input
+          label="Height (cm)"
+          type="number"
+          inputMode="decimal"
+          value={heightCm}
+          onChange={(e) => setHeightCm(e.target.value)}
+          placeholder="e.g. 52.5"
+          hint={
+            heightCm
+              ? `${mmToInches(Math.round(parseFloat(heightCm) * 10))} inches`
+              : undefined
+          }
+        />
+        <Input
+          label="Date"
+          type="datetime-local"
+          value={measuredAt}
+          onChange={(e) => setMeasuredAt(e.target.value)}
         />
         <Input
           label="Notes"

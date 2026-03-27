@@ -4,6 +4,7 @@ export * from "./feed.fixture";
 export * from "./nappy.fixture";
 export * from "./pump.fixture";
 export * from "./dailyTask.fixture";
+export * from "./growth.fixture";
 
 import { resetSessionIdCounter } from "./session.fixture";
 import { resetSleepIdCounter } from "./sleep.fixture";
@@ -14,6 +15,7 @@ import {
   resetDailyTaskIdCounter,
   resetDailyTaskCompletionIdCounter,
 } from "./dailyTask.fixture";
+import { resetGrowthIdCounter } from "./growth.fixture";
 
 export function resetAllFixtureCounters(): void {
   resetSessionIdCounter();
@@ -23,4 +25,5 @@ export function resetAllFixtureCounters(): void {
   resetPumpIdCounter();
   resetDailyTaskIdCounter();
   resetDailyTaskCompletionIdCounter();
+  resetGrowthIdCounter();
 }

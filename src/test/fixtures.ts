@@ -72,6 +72,15 @@ interface DailyTask {
   created_at: string;
 }
 
+interface GrowthEntry {
+  id: number;
+  weight_grams: number | null;
+  height_mm: number | null;
+  measured_at: string;
+  notes: string | null;
+  created_at: string;
+}
+
 interface DashboardData {
   active_timers: {
     type: "sleep" | "feed" | "pump";
@@ -166,6 +175,21 @@ export function createDailyTask(overrides?: Partial<DailyTask>): DailyTask {
     start_date: null,
     completed_today: false,
     last_completed_at: null,
+    created_at: DEFAULT_NOW,
+    ...overrides,
+  };
+}
+
+export function createGrowthEntry(
+  overrides?: Partial<GrowthEntry>,
+): GrowthEntry {
+  const id = nextIdWithOverride(overrides?.id);
+  return {
+    id,
+    weight_grams: 3500,
+    height_mm: null,
+    measured_at: DEFAULT_NOW,
+    notes: null,
     created_at: DEFAULT_NOW,
     ...overrides,
   };

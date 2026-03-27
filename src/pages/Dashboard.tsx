@@ -19,6 +19,7 @@ import {
   CloudRain,
   Clock,
   ListChecks,
+  Ruler,
 } from "lucide-react";
 import { Link } from "react-router";
 
@@ -27,11 +28,27 @@ export default function Dashboard() {
   const { activeTimers, lastSleep, lastFeed, lastNappy, today, dailyTasks } =
     useAppSelector((state) => state.dashboard);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [latestGrowth, setLatestGrowth] = useState<{
+    weight_grams: number | null;
+    height_mm: number | null;
+    measured_at: string;
+  } | null>(null);
   const { showToast } = useToast();
   const navigate = useNavigate();
 
   const refresh = useCallback(() => {
     dispatch(fetchDashboard());
+    api.getGrowthEntries().then((res) => {
+      const entries = res.data?.entries;
+      if (entries && entries.length > 0) {
+        const e = entries[0] as {
+          weight_grams: number | null;
+          height_mm: number | null;
+          measured_at: string;
+        };
+        setLatestGrowth(e);
+      }
+    });
   }, [dispatch]);
 
   useEffect(() => {
@@ -276,6 +293,48 @@ export default function Dashboard() {
           </div>
         </Card>
       </div>
+
+      {/* Growth Card */}
+      <Card
+        padding="sm"
+        className="mt-3 cursor-pointer press-effect"
+        onClick={() => navigate("/growth")}
+      >
+        <div className="flex items-center justify-between py-1">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center">
+              <Ruler className="w-4 h-4 text-[var(--color-accent)]" />
+            </div>
+            <div>
+              <p className="text-[13px] font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                Growth
+              </p>
+              {latestGrowth ? (
+                <p className="text-[15px] font-bold text-[var(--color-accent)] tabular-nums">
+                  {latestGrowth.weight_grams
+                    ? `${(latestGrowth.weight_grams / 1000).toFixed(2)}kg`
+                    : ""}
+                  {latestGrowth.weight_grams && latestGrowth.height_mm
+                    ? " · "
+                    : ""}
+                  {latestGrowth.height_mm
+                    ? `${(latestGrowth.height_mm / 10).toFixed(1)}cm`
+                    : ""}
+                </p>
+              ) : (
+                <p className="text-[13px] text-[var(--color-text-tertiary)]">
+                  No entries yet
+                </p>
+              )}
+            </div>
+          </div>
+          {latestGrowth && (
+            <p className="text-[12px] text-[var(--color-text-tertiary)]">
+              {formatTimeSince(latestGrowth.measured_at)}
+            </p>
+          )}
+        </div>
+      </Card>
 
       <FloatingActionButton onClick={() => setShowQuickAdd(true)} label="Log" />
 

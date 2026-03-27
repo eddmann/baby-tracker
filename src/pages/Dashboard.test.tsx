@@ -3,7 +3,7 @@ import { http, HttpResponse } from "msw";
 import { renderAppAsAuthenticated, screen, userEvent } from "../test/utils";
 import { server } from "../test/mocks/server";
 import { TEST_BASE_URL } from "../test/global-setup";
-import { createDashboardData } from "../test/fixtures";
+import { createDashboardData, createGrowthEntry } from "../test/fixtures";
 import Dashboard from "./Dashboard";
 
 function setupDashboardHandlers(
@@ -126,5 +126,64 @@ describe("Dashboard", () => {
     await user.click(await screen.findByText("Wet Nappy"));
 
     expect(await screen.findByText("Server error")).toBeInTheDocument();
+  });
+
+  test("shows growth card with latest weight", async () => {
+    setupDashboardHandlers();
+    server.use(
+      http.get(`${TEST_BASE_URL}/api/growth`, () => {
+        return HttpResponse.json({
+          data: {
+            entries: [
+              createGrowthEntry({
+                id: 1,
+                weight_grams: 4300,
+                measured_at: new Date().toISOString(),
+              }),
+            ],
+          },
+        });
+      }),
+    );
+    renderAppAsAuthenticated(<Dashboard />);
+
+    expect(await screen.findByText(/growth/i)).toBeInTheDocument();
+    expect(await screen.findByText(/4\.30kg/)).toBeInTheDocument();
+  });
+
+  test("shows growth card with 'No entries yet' when empty", async () => {
+    setupDashboardHandlers();
+    server.use(
+      http.get(`${TEST_BASE_URL}/api/growth`, () => {
+        return HttpResponse.json({ data: { entries: [] } });
+      }),
+    );
+    renderAppAsAuthenticated(<Dashboard />);
+
+    expect(await screen.findByText(/growth/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no entries yet/i)).toBeInTheDocument();
+  });
+
+  test("shows growth card with height when only height present", async () => {
+    setupDashboardHandlers();
+    server.use(
+      http.get(`${TEST_BASE_URL}/api/growth`, () => {
+        return HttpResponse.json({
+          data: {
+            entries: [
+              createGrowthEntry({
+                id: 1,
+                weight_grams: null,
+                height_mm: 545,
+                measured_at: new Date().toISOString(),
+              }),
+            ],
+          },
+        });
+      }),
+    );
+    renderAppAsAuthenticated(<Dashboard />);
+
+    expect(await screen.findByText(/54\.5cm/)).toBeInTheDocument();
   });
 });

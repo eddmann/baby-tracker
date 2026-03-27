@@ -8,6 +8,7 @@ import type {
   PumpEntry,
   DailyTask,
   DailyTaskCompletion,
+  GrowthEntry,
 } from "../../types";
 import { createTestD1Env, clearD1Tables } from "../d1-setup";
 import {
@@ -17,6 +18,7 @@ import {
   createPumpEntry,
   createDailyTask,
   createDailyTaskCompletion,
+  createGrowthEntry,
   resetAllFixtureCounters,
 } from "../fixtures";
 
@@ -212,4 +214,25 @@ export async function insertDailyTaskCompletion(
     )
     .run();
   return completion;
+}
+
+export async function insertGrowthEntry(
+  env: Env,
+  options?: Parameters<typeof createGrowthEntry>[0],
+): Promise<GrowthEntry> {
+  const entry = createGrowthEntry(options);
+  await env.DB.prepare(
+    `INSERT INTO growth_entries (id, weight_grams, height_mm, measured_at, notes, created_at)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+  )
+    .bind(
+      entry.id,
+      entry.weight_grams,
+      entry.height_mm,
+      entry.measured_at,
+      entry.notes,
+      entry.created_at,
+    )
+    .run();
+  return entry;
 }

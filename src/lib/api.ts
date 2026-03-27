@@ -380,6 +380,51 @@ export async function uncompleteDailyTask(
   });
 }
 
+// Growth
+export async function logGrowth(
+  weightGrams: number | null,
+  heightMm: number | null,
+  measuredAt?: string,
+  notes?: string,
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+  return fetchApi("/growth", {
+    method: "POST",
+    body: JSON.stringify({
+      weight_grams: weightGrams,
+      height_mm: heightMm,
+      measured_at: measuredAt,
+      notes,
+    }),
+  });
+}
+
+export async function getGrowthEntries(): Promise<
+  ApiResponse<{ entries: Record<string, unknown>[] }>
+> {
+  return fetchApi("/growth");
+}
+
+export async function updateGrowth(
+  id: number,
+  fields: {
+    weight_grams?: number | null;
+    height_mm?: number | null;
+    measured_at?: string;
+    notes?: string | null;
+  },
+): Promise<ApiResponse<{ entry: Record<string, unknown> }>> {
+  return fetchApi(`/growth/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(fields),
+  });
+}
+
+export async function deleteGrowth(
+  id: number,
+): Promise<ApiResponse<{ success: boolean }>> {
+  return fetchApi(`/growth/${id}`, { method: "DELETE" });
+}
+
 // History
 export async function getHistory(
   date: string,
